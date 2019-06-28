@@ -1,0 +1,7 @@
+.content, .navigation, .header, .listview__item, .chat__search, .chat__title, .user {
+  direction: rtl;
+}
+
+body {
+  font-family: Samim !important
+}

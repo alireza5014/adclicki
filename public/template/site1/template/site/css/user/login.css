@@ -1,0 +1,243 @@
+.login-form {
+    width: 380px;
+    border: 1px solid #1287ad;
+    background: #f8f8f8;
+    box-shadow: 0 0 3px rgba(0, 0, 0, .12);
+    margin: 150px auto 50px;
+    position: relative
+}
+
+.login-form .rules {
+    position: absolute;
+    bottom: 120px;
+    right: 70px;
+    color: #1287ad
+}
+
+.login-form-header h3 {
+    width: 300px;
+    height: 50px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    color: #545454
+}
+
+.login-form-content {
+    width: 340px;
+    margin: auto
+}
+
+.login-form-content .wrong-info {
+    width: 260px;
+    margin: 13px auto;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+.login-form-content .wrong-info li {
+    list-style: disc inside;
+    color: #d21e28;
+    font-size: 11px;
+    padding: 5px 15px;
+    align-self: flex-start
+}
+
+.login-form-content .login-form-box {
+    margin-top: 13px
+}
+
+.login-form-content .login-form-box input {
+    width: 100%;
+    height: 35px;
+    background: url("../images/icons.png.html") right -94px no-repeat #fff;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    margin-bottom: 12px;
+    padding-right: 35px;
+    color: #545454
+}
+
+.login-form-content .login-form-box input:focus {
+    background-position: right -594px;
+    border: 1px solid #1287ad;
+    box-shadow: 0 0 2px rgba(0, 0, 0, .3)
+}
+
+.login-form-content .login-form-box input[name=email] {
+    background-position: right -136px
+}
+
+.login-form-content .login-form-box input[name=email]:focus {
+    background-position: right -636px;
+    border: 1px solid #1287ad;
+    box-shadow: 0 0 2px rgba(0, 0, 0, .3)
+}
+
+.login-form-content .login-form-box input[name=password] {
+    background-position: right -221px
+}
+
+.login-form-content .login-form-box input[name=password]:focus {
+    background-position: right -721px;
+    border: 1px solid #1287ad;
+    box-shadow: 0 0 2px rgba(0, 0, 0, .3)
+}
+
+.login-form-content .login-form-box input.forget-email {
+    background-position: right -179px
+}
+
+.login-form-content .login-form-box input.forget-email:focus {
+    background-position: right -679px;
+    border: 1px solid #1287ad;
+    box-shadow: 0 0 2px rgba(0, 0, 0, .3)
+}
+
+.login-form-content .login-form-box .remember {
+    margin: 7px 0 0
+}
+
+.login-form-content .login-form-box .checkbox {
+    display: inline-block;
+    margin: 20px 15px
+}
+
+.login-form-content .login-form-box input[name=remember] {
+    display: inline;
+    width: 20px;
+    height: 20px;
+    margin: 2px 0
+}
+
+.login-form-content .login-form-box .checkbox label::before {
+    width: 20px;
+    height: 20px;
+    left: -18px;
+    top: -10px;
+    margin-left: 0;
+    border: 1px solid #1287ad;
+    border-radius: 0
+}
+
+.login-form-content .login-form-box .checkbox label::after {
+    width: 20px;
+    height: 20px;
+    left: -18px;
+    top: -7px;
+    margin-left: -1px;
+    padding-left: 0;
+    padding-top: 1px;
+    font-size: 15px;
+    color: #1287ad
+}
+
+.login-form-content .login-form-box .checkbox span {
+    font-size: 11px;
+    color: #1287ad;
+    position: relative;
+    top: 7px
+}
+
+.login-form-content .forget-pass {
+    text-align: center;
+    margin: 0;
+    color: #c00;
+    position: relative;
+    top: -13px
+}
+
+.login-form-content .forget-pass a {
+    font-size: 12px;
+    border-bottom: 1px solid
+}
+
+.google-capcha {
+    width: 301px;
+    height: 75px;
+    margin: 5px 0 10px;
+    background: url("../images/capcha.jpg.html");
+    background-size: cover;
+    border-radius: 3px;
+    box-shadow: 0 0 1px rgba(0, 0, 0, .12)
+}
+
+.login-form-content .login-form-box button.button {
+    width: 100%;
+    height: 40px;
+    margin: 10px 0;
+    border: 1px solid #1287ad;
+    color: #1287ad
+}
+
+.login-form-content .login-form-box a.button {
+    width: 100%;
+    height: 40px;
+    margin: 10px 0;
+    border: 1px solid #1287ad;
+    color: #1287ad
+}
+
+.login-form-content .login-form-box button.button:hover {
+    border-color: #1287ad;
+    color: #fff;
+    background: #1287ad
+}
+.login-form-content .login-form-box a.button:hover {
+    border-color: #1287ad;
+    color: #fff;
+    background: #1287ad
+}
+
+.login-form-content .login-form-box .go-to-register {
+    margin: 0;
+    font-size: 12px;
+    text-align: center;
+    color: #545454
+}
+
+.login-form-content .login-form-box .go-to-register a {
+    color: #1287ad;
+    font-size: 12px
+}
+
+.login-form-content .login-form-box .checkbox .laws {
+    color: #545454
+}
+
+.login-form-content .login-form-box .laws a {
+    color: #1287ad;
+    font-size: 11px
+}
+
+.login-form-content .login-form-box .login-with-google h3 {
+    border-bottom: 1px solid #ccc;
+    color: #767676;
+    text-align: center;
+    padding: 7px 0
+}
+
+.login-form-content .login-form-box .login-with-google div {
+    text-align: center
+}
+
+@media only screen and (max-width: 500px) {
+    .login-form {
+        width: 340px
+    }
+
+    .login-form-content {
+        width: 300px
+    }
+}
+
+.help-inline {
+    display: list-item;
+    color: #c00;
+    padding: 0 10px;
+    list-style: disc inside
+}

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+ 
+
+    <url>
+        <loc>https://www.adclicki.ir/</loc>
+        <lastmod>2019-04-15T15:37:14+04:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+    </url>
+
+    <url>
+        <loc>https://www.adclicki.ir/faq</loc>
+        <lastmod>2019-04-15T15:37:14+04:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+    </url>
+
+    <url>
+        <loc>https://www.adclicki.ir/terms</loc>
+        <lastmod>2019-04-15T15:37:14+04:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+    </url>
+
+    <url>
+        <loc>https://www.adclicki.ir/user/register</loc>
+        <lastmod>2019-04-15T15:37:14+04:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+    </url>
+
+    <url>
+        <loc>https://www.adclicki.ir/user/login</loc>
+        <lastmod>2019-04-15T15:37:14+04:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+    </url>
+
+    <url>
+        <loc>https://www.adclicki.ir/login</loc>
+        <lastmod>2019-04-15T15:37:14+04:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+    </url>
+
+   <url>
+        <loc>https://www.adclicki.ir/users</loc>
+        <lastmod>2019-04-15T15:37:14+04:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+    </url>
+
+    <url>
+        <loc>https://www.adclicki.ir/payments</loc>
+        <lastmod>2019-04-15T15:37:14+04:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+    </url>
+
+    <url>
+        <loc>https://www.adclicki.ir/leaening</loc>
+        <lastmod>2019-04-15T15:37:14+04:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+    </url>
+
+    <url>
+        <loc>https://www.adclicki.ir/ads/tariffs</loc>
+        <lastmod>2019-04-15T15:37:14+04:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+    </url>
+
+    <url>
+        <loc>https://www.adclicki.ir/ads/popup</loc>
+        <lastmod>2019-04-15T15:37:14+04:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+    </url>
+
+  <url>
+        <loc>https://www.adclicki.ir/ads/search</loc>
+        <lastmod>2019-04-15T15:37:14+04:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+    </url>
+
+    <url>
+        <loc>https://www.adclicki.ir/ads/clicki</loc>
+        <lastmod>2019-04-15T15:37:14+04:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+    </url>
+
+
+</urlset>
