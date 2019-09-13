@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Withdrawals extends Model
 {
- protected $fillable=['price','user_id','description','is_pay','image_path'];
+ protected $fillable=['price','user_id','description','is_pay','is_verify','code','image_path'];
     public function getCreatedAtAttribute($value)
     {
 

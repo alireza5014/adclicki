@@ -2,7 +2,7 @@
 @section('header')
     @parent
 
-    <title> لیست کاربران </title>
+    <title> لیست   </title>
 
 @endsection
 @section('content')
@@ -79,7 +79,22 @@
 
         <div class="card-block">
 
+            <div class="row">
+                <div class="col-md-12 mt-4">
 
+                    <a href="{{route('admin.ads.clicki.list')}}" class="btn btn-primary">همه    </a>
+                    <a href="{{route('admin.ads.clicki.list')."?verify=1"}}"  class="btn btn-success"> تایید شده </a>
+                    <a href="{{route('admin.ads.clicki.list')."?verify=-1"}}"  class="btn btn-danger"> تایید نشده </a>
+                    <a href="{{route('admin.ads.clicki.list')."?publish=1"}}"  class="btn btn-success"> منتشر شده </a>
+                    <a href="{{route('admin.ads.clicki.list')."?publish=-1"}}"  class="btn btn-danger"> منتشر نشده </a>
+                    <a href="{{route('admin.ads.clicki.list')."?publish=1&verify=1"}}"  class="btn btn-success"> تایید شده و منتشر شده </a>
+                    <a href="{{route('admin.ads.clicki.list')."?publish=-1&verify=1"}}"  class="btn btn-warning"> تایید شده و منتشر نشده </a>
+                       <a href="{{route('admin.ads.clicki.list')."?publish=1&verify=-1"}}"  class="btn btn-info"> تایید نشده و منتشر شده </a>
+                    <a href="{{route('admin.ads.clicki.list')."?publish=-1&verify=-1"}}"  class="btn btn-pink"> تایید نشده و منتشر نشده </a>
+
+
+                </div>
+            </div>
 
 
                 @include('layouts.material.admin.ads.clicki.table')

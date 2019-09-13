@@ -51,7 +51,8 @@
                                      class="img-responsive"
                                      width="140px" height="30px"/>
                                 <br/>
-                                <a href="{{$ad->link}}" target="_blank">  {{$ad->link}}  </a>
+
+                                <a href="{{$ad->link}}" target="_blank">  آدرس سایت  </a>
 
 
                             </td>
@@ -60,8 +61,6 @@
                             <td>
                                 <p>  {{$ad->title}}  </p>
                             </td>
-
-
 
 
                             <td>{{$ad->daily_click}}</td>
@@ -82,11 +81,11 @@
                                    class="btn btn-xs btn-default"
                                    onclick="confirm({{$ad->id}})">
 
-                                    <i class="zmdi zmdi-check @if($ad->status==1) text-success @else  text-danger @endif">  </i>
+                                    <i class="zmdi zmdi-check @if($ad->status==1) text-success @else  text-danger @endif"> </i>
 
                                     <p>
-                                         @if($ad->status==1) تایید شده @else     منتظر تایید کارشناس @endif</p>
-                                    
+                                        @if($ad->status==1) تایید شده @else     منتظر تایید کارشناس @endif</p>
+
                                     <i style="display: none" id="loader{{$ad->id}}"
                                        class="zmdi zmdi-spinner fa-spin "></i>
 

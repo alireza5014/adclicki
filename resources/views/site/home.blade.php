@@ -1,4 +1,4 @@
-@extends('layouts.site1.layout')
+ @extends('layouts.site1.layout')
 @section('head')
     @parent
 

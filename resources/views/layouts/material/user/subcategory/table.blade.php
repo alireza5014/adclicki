@@ -9,66 +9,41 @@
                     <thead>
                     <tr>
 
-                        <th>#</th>
+                        <th>نام و نام خانوادگی</th>
 
 
-                        <th>دامنه</th>
-                        <th>نوع سایت</th>
-                        <th>نوع تبلیغ</th>
+                        <th>اطلاعات تماس</th>
 
-                        <th> وضعیت</th>
-                        <th> زمان</th>
+                        <th> سهم شما از درآمد زیر مجموعه</th>
+
+                        <th> تاریخ خرید زیر مجموعه</th>
+                        <th> تاریخ انقضا</th>
 
 
                     </tr>
                     </thead>
 
                     <tbody>
-
-                    @foreach($websites as $website)
+                    <?php $i = 0?>
+                    @foreach($subcategories as $subcategory)
                         <tr>
-                            <td>{{$website->id}}</td>
+
+                            <td>{{$subcategory->user->fname}}</td>
 
                             <td>
-                                {{$website->url}}
-                            </td>
-
-                            <td>
-                                @foreach($website->subjects as $subject)
-                                    {{$subject->title}}<br/>
-
-                                @endforeach
-
+                                {{str_replace(substr($subcategory->user->email,1,10),'****',$subcategory->user->email)}}
 
                             </td>
-                            <td>
-                                {{$website->type}}
-                            </td>
-                            <td>
-                                {{website_status($website->status)}}
-                            </td>
+                            <td>{{$referer_price[$i]}} تومان</td>
 
 
-                            <td>{{$website->created_at}}</td>
+                            {{--<td>{{$subcategory->price}}</td>--}}
+                            <td>{{verta($subcategory->created_at)}}</td>
+                            <td>{{verta($subcategory->expire_date)}}</td>
 
-                            <td>
-                                <a href="{{route('user.website.edit',['id'=>$website->id])}}"
-                                   class="btn btn-xs btn-info"><i class="zmdi zmdi-edit"></i></a>
-                            </td>
-                            <td>
-
-                                <button
-                                        onclick="setDeleteModal('{{$website->id}}');"
-                                        data-toggle="modal"
-                                        data-target="#delete_modal"
-                                        class="btn btn-xs btn-danger" >
-                                    <i class="zmdi zmdi-delete"></i>
-                                </button>
-
-                            </td>
                         </tr>
 
-
+                        <?php $i++ ?>
                     @endforeach
 
                     </tbody>
@@ -80,7 +55,7 @@
 </div>
 
 
-{{$websites->appends($_GET)->links()}}
+{{$subcategories->appends($_GET)->links()}}
 
 
 

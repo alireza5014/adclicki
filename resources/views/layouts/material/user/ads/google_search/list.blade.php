@@ -55,6 +55,22 @@
 
 
                             <div class="form-group">
+                                <label class="control-label col-sm-3" for="c_mobile">نوع تخصیص :</label>
+                                <div class="col-sm-9">
+                                   <select id="buy_type" name="buy_type" class="form-control">
+                                       <option value="1">موجودی جستوجوهای من</option>
+                                       <option value="2">موجودی کل من</option>
+                                   </select>
+                                    <p id="buy_type_errors" class="text-danger"></p>
+
+                                </div>
+
+                            </div>
+
+
+
+
+                            <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
                                     <a id="view_request_btn" class="btn   btn-block btn-primary  ">
                                         تخصیص جستجو
@@ -185,6 +201,8 @@
                     data: {
                         "_token": '<?php echo csrf_token()?>',
 
+
+                        "buy_type": $('#buy_type').val(),
                         "count": $('#count').val(),
                         "ads_id": $('#ads_id').val(),
 

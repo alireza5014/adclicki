@@ -40,9 +40,7 @@
 
                             <td>
                                 {{$ad->fname." ".$ad->lname}}<br/>
-                                @if(auth('user')->user()->id==42)
-                                {{$ad->email}}
-                                    @endif
+
 
                             </td>
 

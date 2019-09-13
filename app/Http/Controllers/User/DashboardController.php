@@ -40,7 +40,7 @@ class DashboardController extends Controller
              'مجموع درآمد ها(کلیک)'=>getIncome(getUserId(),0),
             'مجموع درآمد ها(جستجو گوگل)'=>getIncome(getUserId(),1),
             'مجموع درآمد ها(جستجو بینگ)'=>getIncome(getUserId(),2),
-            'سهم شما از درآمد زیر مجموعه ها'=>getRefererIncome(getUserId()),
+            'سهم شما از درآمد زیر مجموعه ها'=>getRefererIncome(getUserId())+getSubCategoryIncome(getUserId()),
             'تعداد زیر مجموعه ها'=>getReferercount(getUserId()),
 
             'تعداد تبلیغ های کلیک شده' => VisitedLink::where('visited_id', getUserId())->where('type',0)->count('price'),

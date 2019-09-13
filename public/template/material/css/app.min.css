@@ -2150,13 +2150,13 @@ pre code {
 }
 
 .form-control {
-  padding: .65rem .1rem;
+  padding: .33rem .2rem;
   font-size: 1rem;
   line-height: 1.25;
   color: #464a4c;
   background-image: none;
   background-clip: padding-box;
-  border: 1px solid #f1f1f1;
+  border: 1px solid #5F5F5F;
   border-radius: 0;
   box-shadow: transparent;
   transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s
@@ -8822,13 +8822,13 @@ progress::-webkit-progress-bar {
   padding: 2rem 2.1rem
 }
 
-.form-control {
-  border-right: 0;
-  border-left: 0;
-  border-top: 0;
-  resize: none;
-  -ms-overflow-style: none
-}
+/*.form-control {*/
+  /*border-right: 0;*/
+  /*border-left: 0;*/
+  /*border-top: 0;*/
+  /*resize: none;*/
+  /*-ms-overflow-style: none*/
+/*}*/
 
   .form-control:focus ~ .form-group__bar:after, .form-control:focus ~ .form-group__bar:before {
     width: 50%
@@ -10072,7 +10072,7 @@ button, input, optgroup, select, textarea {
   width: 100%;
   height: 72px;
   box-shadow: 0 1px 10px rgba(0,0,0,.2);
-  padding: 0 2rem;
+  padding: 0 1rem;
   z-index: 10;
   display: -webkit-box;
   display: -ms-flexbox;

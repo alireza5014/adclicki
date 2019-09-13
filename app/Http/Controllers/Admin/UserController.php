@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\classes\UpLoad;
 use App\Model\Message;
+use App\Model\VisitedLink;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -17,17 +18,39 @@ class UserController extends Controller
 {
 
 
+
+    public function salary()
+    {
+
+        $user_id = Input::get('user_id', '');
+
+        $salary = VisitedLink::where('visited_id', $user_id)->select('id','visited_id', DB::raw("DATE_FORMAT(created_at, '%Y-%m-%d') as created_at "), DB::raw('sum(price) as price'), DB::raw('count(price) as click_count'))
+            ->groupBy(
+                DB::raw("DATE_FORMAT(created_at, '%Y-%m-%d')")
+            )
+            ->with(['v_user' => function ($q) {
+            return $q->select('id','fname','lname','email','mobile','image_path','created_at');
+        }])
+
+            ->orderBy('id','DESC')
+            ->paginate(100);
+
+
+
+        return view('layouts.material.admin.users.salary_list', compact('salary'));
+    }
+
+
     public function list()
     {
 
-        $keyword = Input::get('keyword', '');
+        $search = Input::get('search', '');
 
-        $users = User::where('is_admin', 0)->SearchByKeyword($keyword)
+        $users = User::where('is_admin', 0)->SearchByKeyword($search)
             ->withCount('visited_links')
             ->withCount('referers')
             ->groupBy('users.id')
             ->orderBy('id', 'DESC')
-
             ->paginate(50);
 
 //        foreach ($users as $user) {
@@ -201,6 +224,11 @@ class UserController extends Controller
             $text .= "\n";
             $text .= $request->description;
             sendMessageToBot($text, $user->chat_id);
+        }
+
+        if (isset($request->email)) {
+            $user = User::select('fname', 'lname', 'email')->find($request->user_id);
+            SEND_MESSAGE_WITH_MAIL($user->fname . " " . $user->lname, $user->email, $request->title, $request->description);
         }
         return back()->with('success', 'پیام با موفقیت ارسال شد.');
     }

@@ -49,6 +49,7 @@
 
                             <div class="col-md-6">
                                 <input
+                                        checked
                                         name="telegram"
                                         id="telegram"
                                         data-size="small"
@@ -58,7 +59,20 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label for="name" class="col-md-6 control-label"> ارسال به ایمیل : </label>
 
+                            <div class="col-md-6">
+                                <input
+                                        checked
+                                        name="email"
+                                        id="email"
+                                        data-size="small"
+                                        type="checkbox"
+                                        data-plugin="switchery"
+                                        data-color="#00b19d"/>
+                            </div>
+                        </div>
                         <div class="form-group">
 
                             <div class="col-md-12">
@@ -78,8 +92,16 @@
 
             <div class="card-box">
 
+<div class="col-md-4 offset-md-4 mt-4">
+    <form method="GET"  >
+      <div class="btn-group">
+          <input class="form-control" name="search" >
+          <button  type="submit" class="btn btn-success btn-xs" >جستوجو</button>
 
-                <div class="table-rep-plugin">
+      </div>
+    </form>
+</div>
+    <div class="table-rep-plugin">
                     <div class="table-wrapper">
 
                         <div class="table-responsive" data-pattern="priority-columns">
@@ -138,6 +160,7 @@
                                             <a href="{{route('edit_user',['id'=>$user->id])}}"><span
                                                         class="btn btn-info btn-xs >"> <i class="zmdi zmdi-edit"></i></span></a>
 
+                                            <a href="{{url('admin/users/salary').'?user_id='.$user->id}}"   class="btn btn-info" target="_blank">ریز درآمد  کاربر</a>
 
                                         </td>
 

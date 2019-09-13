@@ -6,6 +6,86 @@
 
 @endsection
 @section('content')
+    <div id="send_message" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modal-no-padding">
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data"
+                          action="{{ route('admin.send_message_to_user') }}">
+                        {{ csrf_field() }}
+
+                        <p id="name"></p>
+                        <input type="hidden" id="send_message_user_id" name="user_id"/>
+
+                        <div class="form-group">
+
+                            <div class="col-md-12">
+                                <input class="form-control" placeholder="title" name="title" id="title" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+
+                            <div class="col-md-12">
+                                <textarea class="form-control" placeholder="description" name="description"
+                                          id="description1" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-md-12">
+                                <input type="file" class="form-control" name="main_image" id="main_image">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="name" class="col-md-6 control-label"> ارسال به تلگرام : </label>
+
+                            <div class="col-md-6">
+                                <input
+                                        checked
+                                        name="telegram"
+                                        id="telegram"
+                                        data-size="small"
+                                        type="checkbox"
+                                        data-plugin="switchery"
+                                        data-color="#00b19d"/>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="name" class="col-md-6 control-label"> ارسال به ایمیل : </label>
+
+                            <div class="col-md-6">
+                                <input
+                                        checked
+                                        name="email"
+                                        id="email"
+                                        data-size="small"
+                                        type="checkbox"
+                                        data-plugin="switchery"
+                                        data-color="#00b19d"/>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-md btn-primary btn-block" >SEND</button>
+                            </div>
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+
+            </div>
+        </div>
+    </div><!-- /.modal-dialog -->
 
     <div id="withdrawal_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1"
          aria-hidden="true">
@@ -146,7 +226,24 @@
 
 
             <div class="card-block">
+           <div class="row">
+               <div class="col-md-4 mt-4">
+                   <form method="GET" class=""  >
+                       <div class="btn-group">
+                           <input class="form-control" name="search" >
+                           <a  type="submit" class="btn btn-default btn-xs" >جست و جو </a>
 
+                       </div>
+                   </form>
+               </div>
+               <div class="col-md-8 mt-4">
+
+                   <a href="{{route('admin.withdrawals.list')}}" class="btn btn-primary">همه درخواست ها</a>
+                   <a href="{{route('admin.withdrawals.list')."?is_pay=1"}}"  class="btn btn-success">  درخواست ها پرداخت شده</a>
+                   <a href="{{route('admin.withdrawals.list')."?is_pay=-1"}}"  class="btn btn-danger">  درخواست ها پرداخت نشده</a>
+
+               </div>
+           </div>
 
                 @include('layouts.material.admin.withdrawals.table')
 
@@ -199,5 +296,13 @@
 
 
             </script>
+
+    <script>
+        function send_message(user_id, name) {
+            $('#name').text('ارسال پیام به ' + name);
+            $('#send_message_user_id').val(user_id);
+
+        }
+    </script>
 
 @stop

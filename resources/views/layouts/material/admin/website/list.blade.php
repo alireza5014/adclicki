@@ -27,8 +27,6 @@
                         </div>
 
                         <div class="form-group">
-
-
                             <div class="col-md-12">
                                 <textarea class="form-control" placeholder="description" name="description"
                                           id="description" required></textarea>
@@ -134,9 +132,12 @@
 
             <div class="card">
 
+                <div class="card-box">
+
 
                 @include('layouts.material.admin.website.table')
 
+            </div>
             </div>
 
 

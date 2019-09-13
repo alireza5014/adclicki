@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'mail.adclicki.ir'),
+    'host' => env('MAIL_HOST', 'smtp.googlemail.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -84,9 +84,9 @@ return [
     |
     */
 
-    'username' => env('MAIL_USERNAME','john'),
+    'username' => env('MAIL_USERNAME','pininja.ir@gmail.com'),
 
-    'password' => env('MAIL_PASSWORD','12345678'),
+    'password' => env('MAIL_PASSWORD','pp014397'),
 
     /*
     |--------------------------------------------------------------------------

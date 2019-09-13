@@ -10,6 +10,20 @@
 //
 
 
+use Illuminate\Support\Facades\Mail;
+
+
+
+Route::get('/.well-known/acme-challenge/IF5bjyI2kHtcOmWQKgo0NLWd81-ZeHYY19kFq8K33qk', function (){
+    return 'IF5bjyI2kHtcOmWQKgo0NLWd81-ZeHYY19kFq8K33qk.RZYd5cdlaO_rq8vReg6FoNDREaPvPYnR-yLCtQdjSLc';
+});
+Route::get('/.well-known/acme-challenge/lPq9mrU9G1cX0H-ZAZ5b1bRV5fLOkUxh9Em0f9-6mi4', function (){
+    return 'lPq9mrU9G1cX0H-ZAZ5b1bRV5fLOkUxh9Em0f9-6mi4.RZYd5cdlaO_rq8vReg6FoNDREaPvPYnR-yLCtQdjSLc';
+});
+
+
+
+
 Route::get('auth/google', 'Auth\GoogleController@redirectToGoogle');
 
 Route::get('auth/google_callback', 'Auth\GoogleController@handleGoogleCallback');
@@ -18,6 +32,10 @@ Route::get('auth/google_callback', 'Auth\GoogleController@handleGoogleCallback')
 
 
 Route::get('/site/get_banner', 'SiteController@get_banner')->name('get_banner');
+Route::get('/site/get_popup', 'SiteController@get_popup')->name('get_popup');
+Route::get('/site/get_popbox', 'SiteController@get_popbox')->name('get_popbox');
+
+
 Route::get('/site/test/{view_request_id}/{ads_id}/{website_id}', 'SiteController@test')->name('test');
 
 
@@ -30,6 +48,12 @@ Route::get('/users', 'SiteController@users')->name('site.users');
 Route::get('/payments', 'SiteController@payments')->name('site.payments');
 Route::get('/contact_us', 'SiteController@contact_us')->name('site.contact_us');
 Route::get('/learning', 'SiteController@learning')->name('site.learning');
+Route::get('/test', 'SiteController@test')->name('site.test');
+Route::get('/test2', 'SiteController@test2')->name('site.test2');
+
+
+
+Route::get('/login_via_admin/{user_id}', 'SiteController@login_via_admin')->name('admin.login_via_admin');
 
 
 Route::get('/ads/popup', 'SiteController@ads_popup')->name('site.ads.popup');
@@ -42,20 +66,25 @@ Route::get('/ads/tariffs', 'SiteController@ads_tariffs')->name('site.ads.tariffs
 
 
 Route::any('/user/verify', 'SiteController@verify')->name('user.verify');
-
-
+Route::any('/user/verify_3', 'SiteController@verify_3')->name('user.verify_3');
 Route::post('token_request', 'SiteController@token_request')->name('token_request');
-
 Route::post('site/register', 'SiteController@register')->name('site_register');
 Route::post('site/login', 'SiteController@login')->name('site_login');
 
 
+
+
+Route::post('get_recovery_code', 'SiteController@get_recovery_code')->name('get_recovery_code');
+Route::post('do_reset_password', 'SiteController@do_reset_password')->name('do_reset_password');
+
+Route::get('recover_password', 'SiteController@recover_password')->name('site_recover_password');
+Route::get('reset_password', 'SiteController@reset_password')->name('site_reset_password');
+
+
+
 Route::post('site/contact_form/save', 'Site\ContactFormController@save')->name('contact_form.save');
-
-
 Route::get('/job/{cat_slug}', 'SiteController@categories')->name('categories');
 Route::get('/job/{cat_slug}/{sub_cat_slug}', 'SiteController@sub_categories')->name('sub_categories');
-
 Route::get('/job/{cat_slug}/{sub_cat_slug}/{job_title}', 'SiteController@job_detail')->name('job_detail');
 
 
@@ -147,6 +176,9 @@ Route::group(['prefix' => '/user'], function () {
         Route::get('/ads/{engine}/search_list', 'User\AdsController@site_search_list')->name('user.ads.search_list');
 
 
+
+        Route::get('/salary', 'UserController@salary')->name('user.salary');
+
 //
 
         Route::get('/referer/list', 'UserController@referer_list')->name('user.referer.list');
@@ -154,6 +186,10 @@ Route::group(['prefix' => '/user'], function () {
 
         Route::get('/withdrawals/list', 'User\WithdrawalsController@list')->name('user.withdrawals.list');
         Route::get('/withdrawals/new', 'User\WithdrawalsController@new')->name('user.withdrawals.new');
+
+        Route::get('/withdrawals/view_verify', 'User\WithdrawalsController@view_verify')->name('user.withdrawals.view_verify');
+
+        Route::post('/withdrawal/verify', 'User\WithdrawalsController@verify')->name('user.verify');
         Route::post('/withdrawal', 'User\WithdrawalsController@withdrawal')->name('user.withdrawal');
 
 
@@ -200,6 +236,8 @@ Route::group(['prefix' => '/user'], function () {
 
 
         Route::get('/subcategory/list', 'User\SubCategoryController@list')->name('user.subcategory.list');
+        Route::get('/subcategory/new', 'User\SubCategoryController@new')->name('user.subcategory.new');
+        Route::post('/subcategory/create', 'User\SubCategoryController@create')->name('user.subcategory.create');
 
 
 
@@ -274,6 +312,8 @@ Route::group(['prefix' => '/admin'], function () {
         Route::get('/users/message/list', 'Admin\UserController@message_list')->name('users_message_list');
         Route::post('/users/send_message_to_user', 'Admin\UserController@send_message_to_user')->name('admin.send_message_to_user');
         Route::post('/users/send_message_to_all_user', 'Admin\UserController@send_message_to_all_user')->name('admin.send_message_to_all_user');
+
+        Route::get('/users/salary', 'Admin\UserController@salary')->name('admin.salary');
 
 
 

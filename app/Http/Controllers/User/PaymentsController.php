@@ -40,7 +40,7 @@ class PaymentsController extends Controller
     {
 
         $count = convert_to_digit($request->click_count, 'en');
-        $price = $count * 7;
+        $price = $count * 10;
 
         $response = ['status' => 1, 'count' => $count, 'price' => number_format($price)];
 
@@ -57,7 +57,7 @@ class PaymentsController extends Controller
 
             $request['res_number'] = rand(1111111, 999999999);
 
-            $request['price'] = $request->click_count * 7;
+            $request['price'] = $request->click_count * 10;
 
             TempPayment::create(
                 [
@@ -86,9 +86,7 @@ class PaymentsController extends Controller
 </form>
 <script>   document.forms['myform'].submit();</script>";
 
-        } catch (Exception $exception) {
-
-        }
+        } catch (Exception $exception) {  }
 
 
 //        return $this->call_back($request->click_count);

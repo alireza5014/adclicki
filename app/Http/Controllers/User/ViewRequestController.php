@@ -21,7 +21,7 @@ class ViewRequestController extends Controller
                 return getTotalClick();
                 break;
             case 2:
-                return getTotalBalance(getUserId()) / 15;
+                return getTotalBalance(getUserId()) / 7;
                 break;
 
             default :
@@ -92,7 +92,7 @@ class ViewRequestController extends Controller
                         [
                             'user_id' => getUserId(),
                             'payment_type' => 1,
-                            'price' => -$count * $zarib*15,
+                            'price' => -$count * $zarib*7,
                             'click_count' => 0,
                             'description' => $description." (تخصیص از طریق موجودی کل) ",
 

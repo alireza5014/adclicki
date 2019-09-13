@@ -256,7 +256,7 @@
 
                                     سهم شما از درآمد زیر مجموعه ها :
 
-                                    <span class="  text-dark  ">{{convert_to_digit(number_format(getRefererIncome(getUserId())))}}</span>
+                                    <span class="  text-dark  ">{{convert_to_digit(number_format(getRefererIncome(getUserId())+getSubCategoryIncome(getUserId())))}}</span>
 
                                     تومان
                                 </li>

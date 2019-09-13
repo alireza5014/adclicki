@@ -67,7 +67,13 @@
                 <div class="card-block">
 
 
+                    <form method="GET"  >
+                        <div class="btn-group">
+                            <input class="form-control" name="search" >
+                            <button  type="submit" class="btn btn-success btn-xs" >جستوجو</button>
 
+                        </div>
+                    </form>
 
                     <div class="table-wrapper">
 
@@ -78,10 +84,9 @@
                                 <tr>
 
                                     <th>ID</th>
-                                    <th>subject</th>
-                                    <th>gamenet</th>
+                                    <th>موضوع</th>
+                                    <th>مشخصات کاریر</th>
 
-                                    <th>کد ملی</th>
 
 
                                     <th> زمان ایجاد</th>
@@ -95,9 +100,8 @@
                                 @foreach($tickets as $ticket)
                                     @if($ticket->user!=null)
                                         <tr>
-                                            <td>{{$ticket->ticket_id}}</td>
+                                            <td>{{$ticket->id}}</td>
                                             <td>{{$ticket->subject}}</td>
-                                            <td> {{$ticket->user->gamenet}}</td>
 
                                             <td>{{$ticket->user->code_melli}}<br/>
                                                 {{$ticket->user->fname}} {{$ticket->user->lname}}<br/>
@@ -113,7 +117,8 @@
 
                                             <td>
 
-                                                <a class="btn-info btn btn-sm " href="{{route('show_ticket',['id'=>$ticket->id])}}"><i class="zmdi zmdi-edit"></i></a>
+                                                <a class="btn-info btn btn-sm " href="{{route('show_ticket',['id'=>$ticket->id])}}"><i class="zmdi zmdi-edit"></i> پاسخ </a>
+                                                <a class="btn-primary btn btn-sm " href="{{route('admin.login_via_admin',['user_id'=>base64_encode($ticket->user->id)])}}"><i class="zmdi zmdi-account"></i> ورود به حساب کاربری </a>
 
                                             </td>
                                         </tr>

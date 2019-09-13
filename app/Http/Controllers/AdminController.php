@@ -168,16 +168,13 @@ class AdminController extends Controller
     {
 
 
-
-
-
-
-
         $data = [
             'همه کاربران' => User::count(),
             'کاربران عضو ربات' => User::where('chat_id', '>', 0)->count(),
-            'کاربران با موبایل' => User::where('mobile','like',"09%")->count(),
-            'کاربران فعال' => User::whereHas('visited_links', function ($query) { $query->where('created_at', '>', getToday()); })->count(),
+            'کاربران با موبایل' => User::where('mobile', 'like', "09%")->count(),
+            'کاربران فعال' => User::whereHas('visited_links', function ($query) {
+                $query->where('created_at', '>', getToday());
+            })->count(),
             'کاربران امروز' => User::where('created_at', '>', getToday())->count(),
             'کاربران دیروز' => User::where('created_at', '<', getToday())->where('created_at', '>', getYesterday())->count(),
             'همه آگهی ها' => Ads::count(),
@@ -196,7 +193,7 @@ class AdminController extends Controller
             'واریز شده از سوی کاربران (امروز) ' => number_format(Payment::where('payment_type', 2)->where('created_at', '>', getToday())->sum('price')),
             '  واریز شده از سوی کاربران( دیروز) ' => number_format(Payment::where('payment_type', 2)->where('created_at', '<', getToday())->where('created_at', '>', getYesterday())->sum('price')),
             'مجموع  پرداخت شده به کاربران' => number_format(Payment::where('payment_type', 3)->sum('price')),
-            'مجموع  پرداخت نشده به کاربران' => number_format(Withdrawals::where('is_pay',-1)->sum('price')),
+            'مجموع  پرداخت نشده به کاربران' => number_format(Withdrawals::where('is_pay', -1)->sum('price')),
             'تعداد پرداخت ها به کاربران' => Payment::where('payment_type', 3)->count('price'),
             'پرداخت شده به کاربران (امروز) ' => number_format(Payment::where('payment_type', 3)->where('created_at', '>', getToday())->sum('price')),
             '  پرداخت شده به کاربران( دیروز) ' => number_format(Payment::where('payment_type', 3)->where('created_at', '<', getToday())->where('created_at', '>', getYesterday())->sum('price')),
@@ -230,7 +227,7 @@ class AdminController extends Controller
 //        });
 
 
-        $keyword = Input::get('keyword', '');
+        $search = Input::get('search', '');
 
         $data[] = Ticket::where('status', 0)->count();
         $data[] = Ticket::where('status', 1)->count();
@@ -238,14 +235,14 @@ class AdminController extends Controller
         $data[] = Ticket::where('status', 3)->count();
         $data[] = Ticket::count();
 
-        $tickets = Ticket::with(['user' => function ($q) use ($keyword) {
-            return $q->SearchByKeyword($keyword)
-
-                ;
-        }])
+        $tickets = Ticket::with(['user' => function ($q) use ($search) {
+            return $q->SearchByKeyword($search);
+        }])->whereHas('user' , function ($q) use ($search) {
+            return $q->SearchByKeyword($search);
+        })
             ->GetTicket($status)
             ->orderBy('id', 'DESC')
-             ->paginate(20);
+            ->paginate(20);
 
         return view('layouts.material.admin.tickets.tickets', compact('tickets', 'data'));
     }
@@ -302,26 +299,32 @@ class AdminController extends Controller
         $this->updateTicket($id);
 
 
-       $ticket= Ticket::where('id', $id)->select('user_id')->first();
-       $user=User::select('id','chat_id','fname','lname')->find($ticket->user_id);
-        $text = "کاربر گرامی";
-        $text .= "\n";
-        $text .= $user->fname." ".$user->lname;
-        $text .= "\n";
+        $ticket = Ticket::where('id', $id)->select('user_id', 'subject')->first();
+        $user = User::select('id', 'chat_id', 'fname', 'lname', 'email')->find($ticket->user_id);
+        $text1 = "کاربر گرامی";
+        $text1 .= "\n";
+        $text1 .= $user->fname . " " . $user->lname;
+        $text1 .= "\n";
 
-        $text .= " تیکت شما در تاریخ";
+        $text= " تیکت شما در تاریخ";
         $text .= "\n";
         $text .= Verta::now();
         $text .= "\n";
 
         $text .= "پاسخ داده شد.";
         $text .= "\n";
+        $text .= "پاسخ تیکت شما :";
+        $text .= "\n";
+
+        $text .= $request->message;
+        $text .= "\n";
 
         $text .= url('');
 
 
         if ($this->checkTicketNotification($user->id)) {
-            sendMessageToBot($text, $user->chat_id);
+            sendMessageToBot($text1.$text, $user->chat_id);
+            SEND_MESSAGE_WITH_MAIL($user->fname . " " . $user->lname, $user->email, $ticket->subject, $text);
         }
 
 

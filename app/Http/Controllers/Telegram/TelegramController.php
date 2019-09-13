@@ -35,7 +35,8 @@ class TelegramController extends Controller
 
     public function __construct()
     {
-        $this->token = env('TELEGRAM_BOT_TOKEN');
+//        $this->token = env('TELEGRAM_BOT_TOKEN');
+        $this->token ='640316721:AAE_C1Ge-Pi9npRlQEi5k1IgPj2Jsp16KlM';
     }
 
     private function menu()
@@ -305,7 +306,8 @@ class TelegramController extends Controller
     private function referrer_income()
     {
 
-        $this->msg = "درآمد حاصل از زیر مجموعه های شما " . getRefererIncome($this->user_id) . " تومان می باشد.";
+        $value=getRefererIncome($this->user_id)+getSubCategoryIncome($this->user_id);
+        $this->msg = "درآمد حاصل از زیر مجموعه های شما " . $value . " تومان می باشد.";
 
 
     }

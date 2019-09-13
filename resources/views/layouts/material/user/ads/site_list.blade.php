@@ -26,20 +26,6 @@
                 <header class="user__info card">
                     <h2> لیست تبلیغات کلیکی</h2>
 
-
-                    <div class="actions">
-                        <a href="" class="actions__item zmdi zmdi-trending-up"></a>
-                        <a href="" class="actions__item zmdi zmdi-check-all"></a>
-
-                        <div class="dropdown actions__item">
-                            <i data-toggle="dropdown" class="zmdi zmdi-more-vert"></i>
-                            <div class="dropdown-menu dropdown-menu-left">
-                                <a href="" class="dropdown-item"> تازه سازی</a>
-                                <a href="" class="dropdown-item"> مدیریت ویجت ها</a>
-                                <a href="" class="dropdown-item"> تنظیمات</a>
-                            </div>
-                        </div>
-                    </div>
                 </header>
 
 

@@ -7,6 +7,7 @@ use App\Model\Ads;
 use App\Model\Message;
 use App\Model\Notification;
 use App\Model\Payment;
+use App\Model\Subcategory;
 use App\Model\ViewRequest;
 use App\Model\VisitedLink;
 use App\Model\Withdrawals;
@@ -44,6 +45,7 @@ class User extends Authenticatable
             'card_number',
             'shaba_number',
             'country',
+            'recovery_link',
         ];
 
     /**
@@ -55,6 +57,18 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+
+    public function getSubcategories()
+    {
+        return $this->hasMany(Subcategory::class, 'user_id', 'id');
+
+    }
+
+
+    public function subcategories()
+    {
+        return $this->belongsToMany(User::class);
+    }
 
 
     public function messages()
@@ -78,30 +92,33 @@ class User extends Authenticatable
         return $this->hasOne(VisitedLink::class, 'visited_id', 'id');
     }
 
+    public function visited_link()
+    {
+        return $this->hasOne(VisitedLink::class, 'visited_id', 'id');
+    }
 
 
     public function r_visited_price()
     {
-        return $this->hasOne(VisitedLink::class, 'visited_id', 'id')->where('price','>',0);
+        return $this->hasOne(VisitedLink::class, 'visited_id', 'id')->where('price', '>', 0);
     }
 
     public function r_visited_referer_price()
     {
-        return $this->hasOne(VisitedLink::class, 'visited_id', 'id')->where('referer_price','>',0);;
+        return $this->hasOne(VisitedLink::class, 'visited_id', 'id')->where('referer_price', '>', 0);;
     }
 
 
-
-    public function scopeSearchByKeyword($query, $keyword)
+    public function scopeSearchByKeyword($query, $search)
     {
 
-        if ($keyword != '') {
-          $query->where(function ($q) use ($keyword) {
-                 $q->where("lname", "LIKE", "%$keyword%")
-                    ->orWhere("fname", "LIKE", "%$keyword%")
-                    ->orWhere("referer_id", "=", $keyword)
-                    ->orWhere("email", "LIKE", "%$keyword%")
-                    ->orWhere("code_melli", "LIKE", "%$keyword%");
+        if ($search != '') {
+            $query->where(function ($q) use ($search) {
+                $q->where("lname", "LIKE", "%$search%")
+                    ->orWhere("fname", "LIKE", "%$search%")
+                    ->orWhere("id", $search)
+                    ->orWhere("email", "LIKE", "%$search%")
+                  ;
             });
         }
 

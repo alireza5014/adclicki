@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 
+use App\Http\Requests\RecoveryRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Model\Ads;
 use App\Model\Notification;
 use App\Model\Payment;
+use App\Model\Subcategory;
 use App\Model\TempPayment;
 use App\Model\ViewRequest;
+use App\Model\VisitedLink;
 use App\Model\VisitedWebsite;
 use App\Model\Website;
 use App\Model\Withdrawals;
@@ -25,6 +29,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Mockery\Exception;
 use SebastianBergmann\CodeCoverage\Report\Xml\Unit;
 use SoapClient;
@@ -38,16 +43,103 @@ class SiteController extends Controller
     private $telegram;
 
 
+    public function login_via_admin($user_id)
+    {
+
+        $user_id = base64_decode($user_id);
+        Auth('user')->loginUsingId($user_id);
+
+        return redirect(route('user.home'));
+
+    }
+
+    public function test2()
+    {
+
+//     $a=   VisitedLink::where('created_at','>','2019-09-04 00:00:00')->where('created_at','<','2019-09-04 23:59:59')->groupBy('visited_id')->pluck('id');
+//
+//      $b= $a->toArray();
+//
+//     VisitedLink::whereIn('id',$b)->update(['price'=>2000]);
+        return 11;
+        $stream_key = 'live2';
+        header("Content-Type: text/html; charset=UTF-8");
+
+        date_default_timezone_set('Asia/Tehran');//set the time zone if server time-zone is not correct
+
+
+        $wowzastart = time();
+        $wowzaend = strtotime(date('d-m-Y H:i')) + 1800;
+        $secret = '54000bc701d99618';
+        $wowzatoken = 'wowzatoken';
+        $ip = getIP();
+// $ip='84.241.26.193';
+
+        $hashstr = hash('sha256', 'shivaava/live2?' . $ip . "&" . $secret . '&' . $wowzatoken . 'endtime=' . $wowzaend . '&' . $wowzatoken . 'starttime=' . $wowzastart . '', true); # IMPORTANT to set third parameter equals to TRUE
+        $usableHash = strtr(base64_encode($hashstr), '+/', '-_');
+
+        return "http://185.8.174.23:1935/shivaava/" . $stream_key . "/playlist.m3u8?" . $wowzatoken . "endtime=" . $wowzaend . "&" . $wowzatoken . "starttime=" . $wowzastart . "&" . $wowzatoken . "hash=" . $usableHash . "";
+
+
+    }
+
+
+    public function get_popup()
+    {
+
+        $from_url='';
+        if(request()->headers->get('referer')){
+            $from_url = rtrim(request()->headers->get('referer'), '/');
+            $url1 = parse_url($from_url);
+            $from_url = $url1['scheme'] . "://" . $url1['host'];
+        }
+
+        $web = Website::where('url', $from_url)
+            ->where('status', 1)
+            ->where('type', "popup")
+            ->first();
+
+        if ($web) {
+            return "var a = document.createElement('a');
+var linkText = document.createTextNode('');
+a.appendChild(linkText);
+a.title = '';
+a.target = '_blank';
+ 
+a.href = '1111';
+a.id = 'my_id';
+
+var img = new Image();  
+img.src = 'rrrr'; 
+img.setAttribute('width', 468);
+img.setAttribute('height', 60);
+ 
+img.setAttribute('style', 'z-index:9999;');
+a.appendChild(img);
+document.getElementById('adclicki_popup').appendChild(a);";
+
+        }
+ return null;
+    }
+
     public function get_banner()
     {
 
-        $from_url = rtrim(request()->headers->get('referer'), '/');
-        $url1 = parse_url($from_url);
-        $from_url = $url1['scheme'] . "://" . $url1['host'];
+        $from_url='';
+        if(request()->headers->get('referer')){
+            $from_url = rtrim(request()->headers->get('referer'), '/');
+            $url1 = parse_url($from_url);
+            $from_url = $url1['scheme'] . "://" . $url1['host'];
+        }
 
-        $web = Website::where('url', $from_url)->where('status', 1)->first();
+        $web = Website::where('url', $from_url)
+            ->where('status', 1)
+            ->where('type', "banner")
+            ->first();
         if ($web) {
-            $view = ViewRequest::with(['ad'])
+            $view = ViewRequest::with(['ad' => function ($q) {
+                $q->where('status', 1);
+            }])
                 ->where('status', 1)
                 ->inRandomOrder()
                 ->first();
@@ -59,7 +151,7 @@ a.appendChild(linkText);
 a.title = '';
 a.target = '_blank';
  
-a.href = '" . url("site/test/" . $view->id . "/" . $view->ad->id."/" . $web->id) . "';
+a.href = '" . url("site/test/" . $view->id . "/" . $view->ad->id . "/" . $web->id) . "';
 a.id = 'my_id';
 
 var img = new Image();  
@@ -75,23 +167,23 @@ document.getElementById('adclicki').appendChild(a);";
 
     }
 
-    public function test($view_request_id,$ads_id,$website_id)
+    public function test($view_request_id, $ads_id, $website_id)
     {
 
-       $ad= Ads::select('link')->find($ads_id);
-    VisitedWebsite::updateOrCreate(['ip'=>getIP(),'view_request_id'=>$view_request_id,'ads_id'=>$ads_id],[
-       'ip'=>getIP(),
-       'browser'=>getBrowser(),
-       'os'=>getOS(),
-       'view_request_id'=>$view_request_id,
-       'ads_id'=>$ads_id,
-       'website_id'=>$website_id,
-       'price'=>5,
-       'type'=>'banner',
-       'referrer_price'=>1,
-   ]);
+        $ad = Ads::select('link')->find($ads_id);
+        VisitedWebsite::updateOrCreate(['ip' => getIP(), 'view_request_id' => $view_request_id, 'ads_id' => $ads_id], [
+            'ip' => getIP(),
+            'browser' => getBrowser(),
+            'os' => getOS(),
+            'view_request_id' => $view_request_id,
+            'ads_id' => $ads_id,
+            'website_id' => $website_id,
+            'price' => 5,
+            'type' => 'banner',
+            'referrer_price' => 1,
+        ]);
 
-   return redirect($ad->link);
+        return redirect($ad->link);
 
     }
 
@@ -151,7 +243,8 @@ document.getElementById('adclicki').appendChild(a);";
                             'payment_type' => 2,
                             'price' => $Price,
                             'click_count' => 0,
-                            'description' => "پرداخت کاربر - کد پیگیری  " . $Resnumber . "  درگاه",
+                            'description' => "پرداخت کاربر - کد پیگیری  " . $Resnumber . "  درگاه آرین پال(خرید زیر کلیک)",
+
 
                         ]
                     );
@@ -160,11 +253,102 @@ document.getElementById('adclicki').appendChild(a);";
                             'user_id' => $pay->user_id,
                             'payment_type' => 1,
                             'price' => -$Price,
-                            'click_count' => $Price / 7,
+                            'click_count' => $Price / 10,
                             'description' => "خرید کلیک",
 
                         ]
                     );
+
+                } catch (Exception $exception) {
+                    file_put_contents('GGGGGG.txt', $exception->getMessage());
+                }
+                return redirect(route('user.payments.list'))->with('success', "	پرداخت با موفقیت انجام شد ، شماره رسید پرداخت : ' . $Refnumber . ' ،  مبلغ پرداختی : ' . $PayPrice . ' !");
+
+            } else {
+
+                return redirect(route('user.payments.list'))->with('error', "خطا در پردازش عملیات پرداخت ");
+
+            }
+        } else {
+            return redirect(route('user.payments.list'))->with('error', "بازگشت از عمليات پرداخت، خطا در انجام عملیات پرداخت ( پرداخت ناموق ) ! ");
+
+        }
+
+    }
+
+
+    public function verify_3()
+    {
+
+
+        $MerchantID = '5590002';
+        $Password = 'hUksJQxBR';
+
+
+        if (isset($_POST['status']) && $_POST['status'] == 100) {
+
+
+            $Status = $_POST['status'];
+
+            $Refnumber = $_POST['refnumber'];
+            $Resnumber = $_POST['resnumber'];
+
+            $pay = TempPayment::where('res_number', $Resnumber)->first();
+            $Price = $pay['price']; //Price By Toman
+
+//Your Order ID
+
+            $client = new SoapClient('http://merchant.arianpal.com/WebService.asmx?wsdl');
+
+            $res = $client->VerifyPayment(array("MerchantID" => $MerchantID, "Password" => $Password, "Price" => $Price, "RefNum" => $Refnumber));
+
+
+            $Status = $res->verifyPaymentResult->ResultStatus;
+            $PayPrice = $res->verifyPaymentResult->PayementedPrice;
+
+            if ($Status == 'Success')// Your Peyment Code Only This Event
+            {
+                try {
+                    TempPayment::where('res_number', $Resnumber)->update([
+
+                        'price' => $Price,
+                        'ref_number' => $Refnumber,
+                    ]);
+
+
+                    Payment::create(
+                        [
+                            'user_id' => $pay->user_id,
+                            'payment_type' => 2,
+                            'price' => $Price,
+                            'click_count' => 0,
+                            'description' => "پرداخت کاربر - کد پیگیری  " . $Resnumber . "  درگاه آرین پال(خرید زیر مجموعه)",
+
+                        ]
+                    );
+                    Payment::create(
+                        [
+                            'user_id' => $pay->user_id,
+                            'payment_type' => 10,
+                            'price' => -$Price,
+                            'click_count' => 0,
+                            'description' => "خرید زیر مجموعه",
+
+                        ]
+                    );
+                    $visited_ids = VisitedLink::inRandomOrder()->take($pay->count)->distinct()->where('created_at', '>', getNow()->subHour(24 * 7))->pluck('visited_id');
+
+                    $visited_ids = $visited_ids->toArray();
+                    for ($i = 0; $i < sizeof($visited_ids); $i++) {
+                        Subcategory::create([
+                            'price' => $Price,
+                            'expire_date' => $pay->expire_date,
+                            'user_id' => $pay->user_id,
+                            'referrer_id' => $visited_ids[$i],
+
+                        ]);
+                    }
+
 
                 } catch (Exception $exception) {
                     file_put_contents('GGGGGG.txt', $exception->getMessage());
@@ -275,7 +459,7 @@ document.getElementById('adclicki').appendChild(a);";
 
     public function register(RegisterRequest $request)
     {
-        sendMessageToBot($request['fname'] . " " . $request['lname'] . " ثبت نام کرد ", ['529275704', '288923947']);
+        sendMessageToBot($request['fname'] . " " . $request['lname'] . " ثبت نام کرد ", ['618723858', '288923947']);
 
 
         try {
@@ -334,6 +518,7 @@ document.getElementById('adclicki').appendChild(a);";
 
     public function faq()
     {
+
 
         return view('layouts.site1.faq');
     }
@@ -396,5 +581,58 @@ document.getElementById('adclicki').appendChild(a);";
         return view('layouts.site1.ads.tariffs', compact('data'));
     }
 
+    public function recover_password()
+    {
+        return view('layouts.site1.recover_password');
+    }
+
+    public function reset_password()
+    {
+
+        $recovery_link = Input::get('recovery_link');
+        $user = User::where('recovery_link', $recovery_link)->first();
+        if ($user) {
+            return view('layouts.site1.reset_password', compact('user'));
+
+        }
+        return view('layouts.site1.error_reset_password');
+
+
+    }
+
+    public function get_recovery_code(RecoveryRequest $request)
+    {
+        $u = User::where('email', $request->email)->update(['recovery_link' => Str::random(32)]);
+
+
+        if ($u) {
+            $user = User::where('email', $request->email)->first();
+
+            $recovery_link = url('reset_password') . "?recovery_link=" . $user->recovery_link;
+            SEND_RECOVERY_MAIL($user->fname . " " . $user->lname, $user->email, $recovery_link);
+            return ['status' => 1, 'redirect' => url(''), 'message' => 'لینک بازیابی به ایمیل ' . $request->email . ' ارسال شد '];
+
+        }
+        return ['status' => 0, 'message' => 'هیچ کاربری با این ایمیل ثبت تام نکرده است'];
+
+
+    }
+
+    public function do_reset_password(ResetPasswordRequest $request)
+    {
+        $u = User::where('recovery_link', $request->recovery_link)->first();
+
+
+        if ($u) {
+            User::where('recovery_link', $request->recovery_link)->update(['password' => Hash::make($request->password), 'recovery_link' => Str::random(32)]);
+
+            Auth('user')->loginUsingId($u->id);
+
+            return ['status' => 1, 'message' => 'رمز ورود شما با موفقیت تغییر یافت', 'redirect' => url('user/home')];
+        }
+        return ['status' => 0, 'message' => 'خطا در تغییر رمز ورود'];
+
+
+    }
 
 }

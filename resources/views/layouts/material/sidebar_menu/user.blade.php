@@ -12,6 +12,10 @@
         <a class="btn btn-sm btn-primary"
            href="https://t.me/adclicki_bot?start=code_{{base64_encode(getUserId())}}">برای عضویت
             در ربات تلکرام اینجا کلیک کنید </a>
+
+        <code dir="ltr">@adclicki_bot</code>
+        <p> کد فعالسازی شما : <code dir="ltr">{{base64_encode(getUserId())}}</code></p>
+
         <div class="dropdown-menu">
             <a class="dropdown-item" href="{{route('user_profile',['id'=>auth($guard)->user()->id])}}">مشاهده
                 پروفایل</a>
@@ -31,29 +35,29 @@
         </li>
 
 
-
-
-
         <li class="navigation__sub @@variantsactive">
             <a><i class="zmdi zmdi-view-week"></i>
+                <span style="float: left" class="badge badge-pill badge-default ">  <i class="zmdi zmdi-arrow-out"></i>  </span>
+
                 تبلیغ دهندگان </a>
 
             <ul>
-{{--                <li class="@@sidebaractive"><a href="{{route('user.ads.clicki.new')}}"> ثبت تبلیغ کلیکی </a></li>--}}
-                <li class="@@sidebaractive"><a href="{{route('user.ads.clicki.list')}}">  تبلیغات کلیکی من </a></li>
+                {{--                <li class="@@sidebaractive"><a href="{{route('user.ads.clicki.new')}}"> ثبت تبلیغ کلیکی </a></li>--}}
+                <li class="@@sidebaractive"><a href="{{route('user.ads.clicki.list')}}"> تبلیغات کلیکی من </a></li>
                 {{--<li class="@@sidebaractive"><a href="{{route('user.ads.google_search.new')}}">ثبت تبلیغ جستجو </a></li>--}}
-                <li class="@@sidebaractive"><a href="{{route('user.ads.google_search.list')}}">  تبلیغات جستوجوی من </a></li>
-
-
+                <li class="@@sidebaractive"><a href="{{route('user.ads.google_search.list')}}"> تبلیغات جستوجوی من </a>
+                </li>
 
 
             </ul>
         </li>
 
         <li class="navigation__sub @@variantsactive">
-            <a><i class="zmdi zmdi-view-week"></i>
-                <span style="float: left" class="badge badge-pill badge-danger ">جدید</span>
-                تبلیغ گیرندگان </a>
+            <a><i class="zmdi zmdi-adb"></i>
+                <span style="float: left" class="badge badge-pill badge-default ">  <i class="zmdi zmdi-arrow-out"></i>  </span>
+
+                تبلیغ گیرندگان
+            </a>
 
             <ul>
 
@@ -64,21 +68,21 @@
                 </li>
 
 
-
-
             </ul>
         </li>
 
 
-        <li>
-            <a href="{{url('user/payments/list')}}" class="waves-effect">
-                <i class="zmdi zmdi-paypal"></i><span>    پرداخت های من </span>
-            </a>
-        </li>
+
 
 
         <li class="navigation__sub @@variantsactive">
-            <a><i class="zmdi zmdi-view-week"></i> کسب درآمد </a>
+            <a><i class="zmdi zmdi-money-box"></i>
+                <span style="float: left" class="badge badge-pill badge-default ">  <i class="zmdi zmdi-arrow-out"></i>  </span>
+
+                کسب درآمد
+
+
+            </a>
 
             <ul>
                 <li class="@@sidebaractive"><a href="{{route('user.ads.site_list')}}"> کسب درآمد از طریق کلیک
@@ -107,28 +111,56 @@
                               style="float: left">{{getTodayUnClickedLink(getUserId(),4)}}     </span>
 
                     </a></li>
+
+
+                {{--<li class="@@hiddensidebarboxedactive"><a href="#">--}}
+                {{--کسب درآمد از فالور اینستاگرام--}}
+                {{--<span class="badge badge-pill badge-danger"--}}
+                {{--style="float: left">بزودی    </span>--}}
+
+                {{--</a></li>--}}
+
+
+                <li class="@@hiddensidebarboxedactive"><a href="{{route('user.salary')}}">
+                        آمار کسب درآمد
+                        <span class="badge badge-pill badge-danger"
+                              style="float: left">NEW    </span>
+
+                    </a></li>
             </ul>
         </li>
 
-        <li>
-            <a href="{{route('user.subcategory.list')}}" class="waves-effect">
-                <i class="zmdi zmdi-view-week"></i>
+        <li class="navigation__sub @@variantsactive">
+            <a><i class="zmdi zmdi-view-week"></i>
+                <span style="float: left" class="badge badge-pill badge-default ">  <i class="zmdi zmdi-arrow-out"></i>  </span>
+                زیر مجموعه </a>
 
-                <span>   خرید زیر مجموعه </span>
-                <span style="float: left" class="badge badge-pill badge-danger "> بزودی</span>
-            </a>
-        </li>
-        <li>
-            <a href="{{route('user.referer.list')}}" class="waves-effect">
-                <i class="zmdi zmdi-view-week"></i>
+            <ul>
+                <li>
+                    <a href="{{route('user.subcategory.list')}}" class="waves-effect">
+                        <i class="zmdi zmdi-view-week"></i>
 
-                <span> لیست زیر مجموعه ها </span>
-            </a>
+                        <span>     زیر مجموعه اجاره ایی</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{route('user.referer.list')}}" class="waves-effect">
+                        <i class="zmdi zmdi-view-week"></i>
+
+                        <span>   زیر مجموعه های دعوت شده </span>
+                    </a>
+                </li>
+
+            </ul>
         </li>
 
 
         <li class="navigation__sub @@variantsactive">
-            <a><i class="zmdi zmdi-star-half"></i> برداشت وجه از حساب </a>
+            <a><i class="zmdi zmdi-star-half"></i>
+                <span style="float: left" class="badge badge-pill badge-default ">  <i class="zmdi zmdi-arrow-out"></i>  </span>
+
+                برداشت وجه از حساب
+            </a>
 
             <ul>
                 <li class="@@sidebaractive"><a href="{{route('user.withdrawals.new')}}">
@@ -146,10 +178,14 @@
             </ul>
         </li>
 
-
+        <li>
+            <a href="{{url('user/payments/list')}}" class="waves-effect">
+                <i class="zmdi zmdi-paypal"></i><span>    پرداخت های من </span>
+            </a>
+        </li>
         <li>
             <a href="{{url('user/ticket-list')}}" class="waves-effect">
-                <i class="zmdi zmdi-menu"></i>
+                <i class="zmdi zmdi-ticket-star"></i>
 
                 <span> تیکت پشتیبانی </span>
             </a>
@@ -157,7 +193,11 @@
 
 
         <li class="navigation__sub @@variantsactive">
-            <a><i class="zmdi zmdi-undo"></i> مدیریت پروفایل </a>
+            <a><i class="zmdi zmdi-account"></i>
+                <span style="float: left" class="badge badge-pill badge-default ">  <i class="zmdi zmdi-arrow-out"></i>  </span>
+
+                مدیریت پروفایل
+            </a>
 
             <ul>
 

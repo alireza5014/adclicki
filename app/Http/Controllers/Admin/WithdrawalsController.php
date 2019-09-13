@@ -10,6 +10,7 @@ use Hekmatinasser\Verta\Facades\Verta;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 
 class WithdrawalsController extends Controller
 {
@@ -68,7 +69,7 @@ class WithdrawalsController extends Controller
             sendMessageToBot($text, $user->chat_id);
         }
 
-        sendMessageToBot($text, ['529275704', '288923947']);
+        sendMessageToBot($text, ['618723858', '288923947']);
 
         return back()->with('success', 'اطلاعات با موفقیت ثبت شد');
 
@@ -76,27 +77,46 @@ class WithdrawalsController extends Controller
 
     public function list(Request $request)
     {
-
-
-        $withdrawals = Withdrawals::with(['user' => function ($q) {
-            return $q->with(['payments' => function ($q) {
+        $condition = false;
+        $search = Input::get('search', '');
+        $is_pay = Input::get('is_pay', 2);
+        if ($is_pay < 2) {
+            $condition = true;
+        }
+         $withdrawals = Withdrawals::with(['user' => function ($q) use ($search) {
+            return $q->SearchByKeyword($search)->with(['payments' => function ($q) {
                 return $q->select('user_id', DB::raw('ifnull(sum(price),0) as price'))->groupBy('user_id');
             }])
                 ->with(['visited_links' => function ($q) {
 
 
-                    $q->select('visited_id')
+                    $q->select('id', 'visited_id')
                         ->selectRaw(DB::raw('sum(price) as price'))
                         ->selectRaw(DB::raw('count(price) as click'))->groupBy('visited_id');
                 }])
-                ->select('id', 'fname', 'lname', 'email', 'shaba_number', 'card_number', 'referer_id','mobile','created_at')
+                ->with(['visited_link' => function ($q) {
+
+
+                    $q->select('id', 'visited_id', 'created_at as my_created_at')
+                        ->orderBy('id', 'DESC');
+                }])
+                ->select('id', 'fname', 'lname', 'email', 'shaba_number', 'card_number', 'referer_id', 'mobile', 'created_at')
                 ->withCount('withdrawals');
 
 
         }])
+            ->whereHas('user', function ($q) use ($search) {
+                return $q->SearchByKeyword($search)->with(['payments' => function ($q) {
+                    return $q->select('user_id', DB::raw('ifnull(sum(price),0) as price'))->groupBy('user_id');
+                }]);
+            })
             ->withCount('referrers')
-            ->orderBy('id', 'DESC')
-            ->paginate(30);
+            ->orderBy('id', 'DESC');
+
+        if ($condition) {
+            $withdrawals = $withdrawals->where('is_pay', $is_pay);
+        }
+          $withdrawals = $withdrawals->paginate(30);
 
 
         if ($request->ajax()) {

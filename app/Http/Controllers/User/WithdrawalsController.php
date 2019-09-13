@@ -25,15 +25,17 @@ class WithdrawalsController extends Controller
     }
 
 
-    private function makeWithdrawal($request, $price)
+    private function makeWithdrawal($description, $price,$code)
     {
         try {
-            Withdrawals::create(
+            Withdrawals::updateOrCreate(['is_pay'=>-1,'user_id'=>getUserId()],
                 [
                     'user_id' => getUserId(),
                     'price' => $price,
-                    'description' => $request->description,
+                    'description' => $description,
                     'is_pay' => -1,
+                    'is_verify' => 0,
+                    'code' =>$code,
 
 
                 ]
@@ -50,6 +52,14 @@ class WithdrawalsController extends Controller
     }
 
 
+    private function payment_check($is_pay,$is_verify)
+    {
+        return Withdrawals::where('user_id', getUserId())
+            ->where('is_pay', $is_pay)
+            ->where('is_verify', $is_verify)
+            ->count();
+    }
+
     public function withdrawal(WithdrawalsRequest $request)
     {
 
@@ -57,13 +67,8 @@ class WithdrawalsController extends Controller
 
         if (getTotalBalance(getUserId()) >= $price) {
 
-            $check = Withdrawals::where('user_id', getUserId())
-                ->where('is_pay', "-1")
-                ->count();
-
-            $check2 = Withdrawals::where('user_id', getUserId())
-                ->where('is_pay', "1")
-                ->count();
+            $check = $this->payment_check("-1",0);
+            $check2 = $this->payment_check("1",1);
 
 
             if ($check > 0) {
@@ -72,16 +77,15 @@ class WithdrawalsController extends Controller
             } else {
 
                 if ($check2 == 0) {
+                    if ($price < 1000) {
+                        return back()->with('error', 'حداقل مبلغ برداشت برای بار اول ۱۰۰۰ تومان می باشد');
 
-                    $this->makeWithdrawal($request, $price);
-
+                    }
                 }
-                elseif ($check2 == 1) {
+
+               elseif ($check2 == 1) {
                     if ($price < 5000) {
                         return back()->with('error', 'حداقل مبلغ برداشت برای بار دوم ۵۰۰۰ تومان می باشد');
-
-                    } else {
-                        $this->makeWithdrawal($request, $price);
 
                     }
                 }
@@ -89,11 +93,12 @@ class WithdrawalsController extends Controller
                     if ($price < 10000) {
                         return back()->with('error', 'حداقل مبلغ برداشت برای بار سوم  و به بعد ۱۰,۰۰۰ تومان می باشد');
 
-                    } else {
-                        $this->makeWithdrawal($request, $price);
-
                     }
                 }
+                $code=rand(10000,99999);
+                $this->makeWithdrawal($request->description, $request->price,$code);
+
+                $this->sendVerifyCodeWithEmailAndTelegram($code);
             }
 
         } else {
@@ -102,7 +107,51 @@ class WithdrawalsController extends Controller
         };
 
 
-        $text = " درخواست برداشت مبلغ " . $request->price . " تومان با موفقیت ثبت شد ";
+
+        return redirect(route('user.withdrawals.view_verify'))->with('success', 'کد تایید به ایمیل شما ارسال شد');
+
+    }
+
+
+    public function view_verify()
+    {
+
+
+        return view('layouts.material.user.withdrawals.verify');
+
+    }
+    public function verify(Request $request)
+    {
+
+
+         $w = Withdrawals::where('user_id', getUserId())->where('is_verify', 0)->where('is_pay', -1)->first();
+        if ($w) {
+            if ($request->code == $w->code) {
+
+                Withdrawals::where('user_id', getUserId())
+                    ->where('is_verify', 0)
+                    ->where('is_pay', -1)
+                    ->where('code', $request->code)
+                    ->update([
+                        'code' => rand(10000, 99999),
+                        'is_verify' => 1
+                    ]);
+                $this->sendMessageWithMailAndTelegram($w->price);
+                return redirect(route('user.withdrawals.list'))->with('success', 'درخواست شما با موفقیت ثبت شد.');
+
+            }
+
+        }
+        return redirect(route('user.withdrawals.view_verify'))->with('error', 'کد تایید اشتباه می باشد');
+
+
+    }
+
+    private function sendMessageWithMailAndTelegram($price)
+    {
+        $text = " درخواست برداشت مبلغ " . $price . " تومان با موفقیت ثبت شد ";
+        $text .= "\n";
+        $text .= "در اسرع وقت به حساب شما واریز خواهد شد";
         $text .= "\n";
         $text .= getUserId();
         $text .= "\n";
@@ -114,10 +163,29 @@ class WithdrawalsController extends Controller
             sendMessageToBot($text, $uchat_id);
         }
 
-        sendMessageToBot($text, ['529275704', '288923947']);
+        sendMessageToBot($text, ['618723858', '599050835', '288923947']);
+        SEND_MESSAGE_WITH_MAIL(auth('user')->user()->fname . " " . auth('user')->user()->lname, auth('user')->user()->email, "درخواست برداشت مبلغ", $text);
+
+    }
 
 
-        return redirect(route('user.withdrawals.list'))->with('success', 'درخواست شما با موفقیت ثبت شد.');
+    private function sendVerifyCodeWithEmailAndTelegram($code)
+    {
+
+        $text = "کد تایید برای درخواست وجه در سایت اد کلیکی" . $code . " می باشد. ";
+        $text .= "\n";
+        $text .= Verta::now();
+        $text .= "\n";
+        $text .= url('');
+        $uchat_id = auth('user')->user()->chat_id;
+
+        if ($uchat_id > 0) {
+            sendMessageToBot($text, $uchat_id);
+        }
+
+        sendMessageToBot($text, ['618723858', '599050835', '288923947']);
+        SEND_MESSAGE_WITH_MAIL(auth('user')->user()->fname . " " . auth('user')->user()->lname, auth('user')->user()->email, "درخواست برداشت مبلغ", $text);
+
 
     }
 }

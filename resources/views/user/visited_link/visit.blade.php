@@ -6,7 +6,7 @@
             ریـال
             درآمد این تبلیغ <span id="timer" style="color: #ff5039"></span> منتظر بمانید</p>
 
-        <iframe sandbox="allow-same-origin allow-scripts allow-forms" id="iframe1" src="{{$ads_info->ad->link}}"
+        <iframe sandbox="allow-same-origin allow-scripts allow-forms" id="iframe1" src="{{$view_request->ad->link}}"
                 style="width: 100%; height:100%;"
                 frameborder="0" scrolling="auto">
 

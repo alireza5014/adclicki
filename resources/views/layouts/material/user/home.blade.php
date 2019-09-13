@@ -7,25 +7,10 @@
 @endsection
 @section('content')
 
-    <header class="user__info card">
-        <h1>داشبورد</h1>
 
-
-        <div class="actions">
-            <a href="" class="actions__item zmdi zmdi-trending-up"></a>
-            <a href="" class="actions__item zmdi zmdi-check-all"></a>
-
-            <div class="dropdown actions__item">
-                <i data-toggle="dropdown" class="zmdi zmdi-more-vert"></i>
-                <div class="dropdown-menu dropdown-menu-left">
-                    <a href="" class="dropdown-item"> تازه سازی</a>
-                    <a href="" class="dropdown-item"> مدیریت ویجت ها</a>
-                    <a href="" class="dropdown-item"> تنظیمات</a>
-                </div>
-            </div>
-        </div>
-    </header>
-
+    <div class='m-r-15 m-l-15 card-box alert alert-danger'>
+        <p class="text-white"> با سلام. کاربر پرداخت کننده سایت ادکلیکی تغییر یافت .از این پس پرداخت ها به موقع انجام خواهد شد. </p>
+    </div>
 <div class="user__info card">
     <div class="row group  ">
 
@@ -51,13 +36,10 @@
 </div>
 
 
-
-
 @stop
 
 @section('footer')
     @parent
-
 
 
 

@@ -7,6 +7,7 @@ $path=url('template/site1');?>
 <html xmlns="http://www.w3.org/1999/xhtml" dir="rtl" lang="fa-IR">
 <head>
     @section('head')
+        <script src="{{$path}}/template/site/js/jquery.js"></script>
 
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
@@ -26,8 +27,7 @@ $path=url('template/site1');?>
         <link rel="stylesheet" type="text/css" href="{{$path}}/template/site/css/font-awesome.min.css">
         <link rel="stylesheet" href="{{$path}}/template/site/css/style.css">     <link rel="stylesheet" href="{{$path}}/template/site/css/modal.css">
 
-        <script src="{{$path}}/template/site/js/jquery.js"></script>
-        <!--<script src="template/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>-->
+         <!--<script src="template/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>-->
         <script src="{{$path}}/template/core/core.js"></script>
 
         <!-- Start Alexa Certify Javascript -->
@@ -89,12 +89,17 @@ $path=url('template/site1');?>
                     <a class="btn btn-primary login-header"  href="{{url('login')}}" >
                         <span>ورود</span>
                     </a>
+
+                    <a class="btn btn-primary " style="background: #c1570b" href="{{url('recover_password')}}" >
+                        <span>بازیابی رمز عبور</span>
+                    </a>
                     @else
+
+
                     <span class="icon-profile-male"></span>
                     <div class="dropdown">
-                        <div class="dropbtn" id="dropbtn">
-                        </div>
-                        <div class="user-info">
+
+                        <div class="user-info" >
                             <span> {{auth('user')->user()->fname." ".auth('user')->user()->lname}}</span>
                             <i class="fa fa-angle-down"></i>
                         </div>
@@ -236,7 +241,7 @@ $path=url('template/site1');?>
 
 @section('js')
 
-<script src="{{$path}}/template/site/js/jquery.js" ></script>
+{{--<script src="{{$path}}/template/site/js/jquery.js" ></script>--}}
 
  {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" ></script> --}}
 <script src="{{$path}}/template/site/js/user/scroll.jquery.min.js" ></script>
@@ -270,7 +275,15 @@ $path=url('template/site1');?>
 <a id="demo" href="https://www.adclicki.ir/user/pgk/5">-</a>
 <!-- shema-->
 {{--<script src="//code.tidio.co/anzdmo7lio9uih04o0xjh6wrzcmhjsee.js"></script>--}}
+<script>
 
+    $('.user-info').on('click',function () {
+        $('#myDropdown').toggleClass('show');
+
+    })
+
+
+ </script>
 </body>
 </html>
 </html>

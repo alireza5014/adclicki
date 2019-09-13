@@ -12,19 +12,7 @@
         <header class="content__title">
             <h1> پیام ها</h1>
 
-            <div class="actions">
-                <a href="" class="actions__item zmdi zmdi-trending-up"></a>
-                <a href="" class="actions__item zmdi zmdi-check-all"></a>
 
-                <div class="dropdown actions__item">
-                    <i data-toggle="dropdown" class="zmdi zmdi-more-vert"></i>
-                    <div class="dropdown-menu dropdown-menu-left">
-                        <a href="" class="dropdown-item"> تازه سازی</a>
-                        <a href="" class="dropdown-item"> مدیریت ویجت ها</a>
-                        <a href="" class="dropdown-item"> تنظیمات</a>
-                    </div>
-                </div>
-            </div>
         </header>
 
         <div class="messages">
@@ -43,7 +31,6 @@
 
                     </div>
                 </div>
-
 
 
             </div>
@@ -98,11 +85,18 @@
                 <div class="messages__reply">
                     <form method="POST" action="{{route('user_save_ticket',['id'=>$tickets->id])}}">
                         @csrf
-                        <textarea name="message" id="message" class="messages__reply__text"
-                                  placeholder="Type a message..."></textarea>
-                        <button class="btn btn-success btn--icon messages__reply__btn waves-effect"><i
-                                    class="zmdi zmdi-mail-send"></i></button>
 
+
+                        <div class="btn-group" style="width: 100%" role="group" aria-label="Basic example">
+      <textarea name="message" id="message" class="messages__reply__text"
+                placeholder="Type a message..."></textarea>
+
+                            <button class="btn btn-success btn--icon  waves-effect mr-2"><i
+                                        class="zmdi zmdi-mail-send"></i></button>
+
+                            <a class="btn btn-primary btn--icon  waves-effect text-white mr-2"><i
+                                        class="zmdi zmdi-mic"></i></a>
+                        </div>
                     </form>
                 </div>
             </div>

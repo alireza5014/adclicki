@@ -80,7 +80,7 @@
 
                     <div class="panel-body">
                 <ul class="list-group">
-                    <li class="list-group-item">از 200 کلیک تا 10,000 کلیک , هرکلیک 7 تومان (70 ریال)</li>
+                    <li class="list-group-item">از 200 کلیک تا 10,000 کلیک , هرکلیک 10 تومان (100 ریال)</li>
                 </ul>
                     </div>
                 </div>

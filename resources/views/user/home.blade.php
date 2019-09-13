@@ -5,8 +5,9 @@
     <title>داشبورد</title>
     @parent
 @endsection
-@section('content')
 
+
+@section('content')
 
     <div class="card-box">
         <div class='m-r-15 m-l-15 card-box'><p class="text-danger"> نحوه جذب زیر مجموعه:<p> <p> لینک زیر را به دوستانتان ارسال کنید. بعد از ثبت نام از طریق این لینک زیر مجموعه شما خواهند شد   و ۲۰   در صد از درآمد آنها به شما تعلق خواهد گرفت. </p>

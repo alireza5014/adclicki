@@ -11,16 +11,32 @@
     <div class="card">
 
 
-        <a href="#" class="btn btn-success btn-xs">
-            خرید زیر مجموعه اجاره ای</a>
+        <a href="{{route('user.subcategory.new')}}" class="btn btn-success btn-xs"> خرید زیر مجموعه اجاره ای</a>
     </div>
-    <div class="col-sm-12">
+
+    <div class="col-md-12 col-sm-12">
 
 
         <div class="card">
-            <h3> بزودی خرید زیر مجموعه اجاره ایی به سایت ادکلیکی اضافه خواهد شد</h3>
 
-            {{--            @include('layouts.material.user.subcategory.table')--}}
+            <div class="card-block">
+
+                <div class="clearfix">
+                    <div class="float-right">
+                        <h5> لیست زیر مجموعه اجاره ای من </h5>
+                    </div>
+
+                    <div class="float-left">
+                        <a href="{{route('user.subcategory.new')}}" class="btn btn-primary btn-xs"> خرید زیر مجموعه
+                            اجاره ای</a>
+
+                    </div>
+                </div>
+                <div class="my_table">
+                    @include('layouts.material.user.subcategory.table')
+                </div>
+            </div>
+
 
         </div>
 
@@ -33,17 +49,24 @@
                     $('#loader').show();
                     var page = $(this).attr('href');
                     fetch_data(page);
+
+
                 });
 
 
             });
 
             function fetch_data(page) {
+
                 $.ajax({
                     url: page,
                     success: function (data) {
-                        $('.card-box').html(data);
+                        $('.my_table').html(data);
                         $('#loader').hide();
+
+                    },
+                    error: function (error) {
+
 
                     }
                 });

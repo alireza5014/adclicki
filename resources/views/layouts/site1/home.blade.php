@@ -43,6 +43,8 @@
 
 
     <main>
+        <div id="adclicki_popup">  <script type="text/javascript">  document.write('<script type="text/javascript" src="https://www.adclicki.ir/site/get_popup" async></scri' + 'pt>'); </script>    </div>
+
         <div id="adclicki">  <script type="text/javascript">  document.write('<script type="text/javascript" src="https://www.adclicki.ir/site/get_banner" async></scri' + 'pt>'); </script>    </div>
         <section class="main " role="main">
             <div class="breadcrumb">

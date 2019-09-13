@@ -36,6 +36,43 @@ $path = url('template/material');
 </head>
 
 <body data-ma-theme="blue-grey">
+<style>
+
+    .form-group--float .form-control ~ label {
+
+        bottom: 2.65rem !important;
+
+    }
+    .header{
+        height: 35px !important;
+    }
+
+    .sidebar {
+
+        padding: 45px 2rem .5rem !important;
+
+    }
+
+    @media (min-width: 1200px) {
+
+        .content:not(.content--boxed):not(.content--full) {
+            padding: 45px 270px 0 30px;
+        }
+    }
+
+    @media (max-width: 1199px) and (min-width: 576px) {
+        .content:not(.content--boxed):not(.content--full) {
+            padding: 45px 30px 0 !important;
+        }
+    }
+
+    .quick-stats__item {
+        padding: 0.5rem 0.5rem 0.45rem !important;
+
+        margin-bottom: 10px !important;
+
+    }
+</style>
 <main class="main">
     <div class="page-loader">
         <div class="page-loader__spinner">
@@ -59,12 +96,7 @@ $path = url('template/material');
         </div>
 
 
-        <form class="search">
-            <div class="search__inner">
-                <input type="text" class="search__text" placeholder="متن یا عبارت خود را برای جستجو وارد نمایید">
-                <i class="zmdi zmdi-search search__helper" data-ma-action="search-close"></i>
-            </div>
-        </form>
+
         <?php
         $messages = \App\Model\Message::whereHas('users', function ($q) use ($guard) {
             return $q->where('users.id', getUserId($guard));
@@ -109,6 +141,11 @@ $path = url('template/material');
                         <a href="{{route('user.ads.search_list',['engine'=>'aparat'])}}" class="view-more">کسب درآمد از
                             سرچ آپارات
                             <span class="badge badge-pill badge-danger ">    {{getTodayUnClickedLink(getUserId($guard),4)}}</span>
+                        </a>
+
+                        <a href="" class="view-more">
+                            کسب درآمد از اینستاگرام
+                            <span class="badge badge-pill badge-danger ">    بزودی</span>
                         </a>
 
 
@@ -529,7 +566,7 @@ $path = url('template/material');
                     <div class="quick-stats__item bg-blue-grey">
 
                         <div class="quick-stats__info">
-                            <h6 class="color-white">{{convert_to_digit(number_format(getRefererIncome(getUserId())))}} <span>تومان</span></h6>
+                            <h6 class="color-white">{{convert_to_digit(number_format(getRefererIncome(getUserId())+getSubCategoryIncome(getUserId())))}} <span>تومان</span></h6>
                             <small style="font-size: 12px"> سهم شما از درآمد زیر مجموعه ها</small>
                         </div>
 
@@ -549,6 +586,44 @@ $path = url('template/material');
     </section>
 
 </main>
+<script>
+    function copyToClipboard(elementId, type = 'select',title="کپی شد") {
+
+
+        var aux = document.createElement("input");
+
+
+        switch (type) {
+            case 'select':
+                aux.setAttribute("value", $("#" + elementId + " option:selected").text());
+                break;
+
+            case 'input':
+                aux.setAttribute("value", $("#" + elementId).val());
+                break;
+
+            case 'element':
+
+
+                aux.setAttribute("value", $("#" + elementId).text());
+                $("#" + elementId).css("background-color", "yellow");
+                break;
+        }
+
+        document.body.appendChild(aux);
+
+        aux.select();
+
+        document.execCommand("copy");
+
+
+        document.body.removeChild(aux);
+
+
+    }
+
+</script>
+
 
 {{--<script src="//code.tidio.co/anzdmo7lio9uih04o0xjh6wrzcmhjsee.js"></script>--}}
 
@@ -584,7 +659,6 @@ $path = url('template/material');
 <script src="{{$path}}/js/app.min.js"></script>
 
 <script src="{{$path}}/vendors/bower_components/select2/dist/js/select2.full.min.js"></script>
-
-@include('flash_message')
+ @include('flash_message')
  </body>
 </html>

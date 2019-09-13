@@ -44,7 +44,7 @@
 
                                 <div class="col-md-10">
                                     <input dir="ltr" id="token" type="text" class="form-control" name="token"
-                                           value="{{env('TELEGRAM_BOT_TOKEN')}}">
+                                           value="640316721:AAE_C1Ge-Pi9npRlQEi5k1IgPj2Jsp16KlM">
 
                                     @component('input_error',['name' => 'token'])@endcomponent
 

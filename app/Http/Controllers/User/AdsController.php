@@ -42,7 +42,7 @@ class AdsController extends Controller
     {
 
         $text = getUserId() . "\n" . $request->title . "\n" . "یک آگهی جستجو گوگل ویرایش کرد";
-        sendMessageToBot($text, ['529275704', '288923947']);
+        sendMessageToBot($text, ['618723858','288923947']);
 
         ($request->link == $request->old_link) ? $status = [] : $status = $status = ['status' => -1];
 
@@ -75,7 +75,7 @@ class AdsController extends Controller
     {
 
         $text = getUserId() . "\n" . $request->title . "\n" . "یک آگهی کلیکی ویرایش کرد";
-        sendMessageToBot($text, ['529275704', '288923947']);
+        sendMessageToBot($text, ['618723858','288923947']);
         ($request->link == $request->old_link) ? $status = [] : $status = $status = ['status' => -1];
 
         $store_path = '/images/' . getUserId() . '/ads/';
@@ -178,10 +178,10 @@ class AdsController extends Controller
             $q->where('created_at', '>', getToday());
         }])
             ->withCount(['visited_links' => function ($q) {
-                $q;
+               return $q;
             }])
             ->withCount(['visited_websites' => function ($q) {
-                $q;
+                return  $q;
             }])
             ->whereHas('view_request', function ($q) use ($visited_link) {
                 return $q->where('status', 1)->whereNotIn('id', $visited_link);;
@@ -209,21 +209,22 @@ class AdsController extends Controller
         });
         //  return $site_ads;
 
-        return view('layouts.material.user.ads.site_list', compact('site_ads'));
+       return view('layouts.material.user.ads.site_list', compact('site_ads'));
 
     }
 
 
     private function getSearchAds($type)
     {
+
         $visited_link = VisitedLink::where('visited_id', getUserId())
-            ->where('created_at', '>', getToday())
+            ->where('created_at', '>', getNow()->subHour(2))
             ->where('price', '>', 0)
             ->pluck('view_request_id');
 
 
         $ads = Ads::withCount(['visited_links' => function ($q) {
-            $q->where('created_at', '>', getToday());
+            $q->where('created_at', '>', getNow()->subHour(2));
         }])
             ->whereHas('view_request', function ($q) use ($visited_link) {
                 return $q->where('status', 1)->whereNotIn('id', $visited_link);;
@@ -255,6 +256,8 @@ class AdsController extends Controller
 
     public function site_search_list($engine)
     {
+
+
         switch ($engine) {
 
             case "google" :
@@ -370,7 +373,7 @@ class AdsController extends Controller
     public function clicki_save(AdsRequest $request)
     {
         $text = getUserId() . "\n" . $request->title . "\n" . "یک آگهی کلیکی ثبت کرد";
-        sendMessageToBot($text, ['529275704', '288923947']);
+        sendMessageToBot($text, ['618723858','288923947']);
         $store_path = '/images/' . getUserId() . '/ads/';
 
         $image = UpLoad::create('image')
@@ -403,7 +406,7 @@ class AdsController extends Controller
     {
 
         $text = getUserId() . "\n" . $request->title . "\n" . "یک آگهی جستجو گوگل ثبت کرد";
-        sendMessageToBot($text, ['529275704', '288923947']);
+        sendMessageToBot($text, ['618723858','288923947']);
         $ads = Ads::create(
             [
                 'user_id' => getUserId(),

@@ -3,6 +3,7 @@
 
 use App\Model\Ads;
 use App\Model\Payment;
+use App\Model\Subcategory;
 use App\Model\VisitedLink;
 use App\Model\VisitedWebsite;
 use App\Setting;
@@ -12,6 +13,7 @@ use Carbon\Carbon;
 
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redis;
 
 use Intervention\Image\ImageManagerStatic as Image;
@@ -50,7 +52,8 @@ function getActivityType()
 function sendMessageToBot($text, $chat_id)
 {
     try {
-        $telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
+//        $telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
+        $telegram = new Api('640316721:AAE_C1Ge-Pi9npRlQEi5k1IgPj2Jsp16KlM');
 
         if (gettype($chat_id) != 'array') {
             $chat_id = [$chat_id];
@@ -75,17 +78,40 @@ function sendMessageToBot($text, $chat_id)
 
 }
 
-function getTodayUnClickedLink($user_id, $type = 0)
+ function getHirePrice(){
+return 700;
+     return getTodayUnClickedLinkCount(0)*30+getTodayUnClickedLinkCount(1)*2*30;
+ }
+function getTodayUnClickedLinkCount($type = 0)
 {
-    $visited_link = VisitedLink::where('visited_id', $user_id)
-        ->where('created_at', '>', getToday())
+    $visited_link = VisitedLink::where('created_at', '>', getNow()->subHour(2))
         ->where('price', '>', 0)
         ->pluck('view_request_id');
 
     $ads_count = Ads::whereHas('view_request', function ($q) use ($visited_link) {
-        return $q->where('status', 1)
+        $q->where('status', 1)
             ->where('count', '>', 0)
-            ->whereNotIn('id', $visited_link);;
+            ->whereNotIn('id', $visited_link);
+    })
+        ->where('status', 1)
+        ->where('type', $type)
+        ->count();
+
+    return $ads_count;
+}
+
+
+function getTodayUnClickedLink($user_id, $type = 0)
+{
+    $visited_link = VisitedLink::where('visited_id', $user_id)
+        ->where('created_at', '>', getNow()->subHour(2))
+        ->where('price', '>', 0)
+        ->pluck('view_request_id');
+
+    $ads_count = Ads::whereHas('view_request', function ($q) use ($visited_link) {
+          $q->where('status', 1)
+            ->where('count', '>', 0)
+            ->whereNotIn('id', $visited_link);
     })
         ->where('status', 1)
         ->where('type', $type)
@@ -139,7 +165,7 @@ function getSetting($field = 'all')
 
 function getTotalBalance($user_id)
 {
-    return Payment::where('user_id', $user_id)->sum('price') + getTotalIncome($user_id) + getRefererIncome($user_id)+getTotalWebsite();
+    return Payment::where('user_id', $user_id)->sum('price') + getTotalIncome($user_id) + getRefererIncome($user_id)+getTotalWebsite()+getSubCategoryIncome($user_id);
 
 }
 
@@ -184,6 +210,24 @@ function getRefererIncome($user_id)
     return VisitedLink::whereIn('visited_id', $referer)->sum('referer_price');
 
 }
+function getSubCategoryIncome($user_id)
+{
+
+    $income=0;
+    $referers =  Subcategory::where('user_id', $user_id)->get(['referrer_id','expire_date','created_at']);
+
+    for ($i=0;$i<sizeof($referers);$i++)
+    {
+        $income+=VisitedLink::where('visited_id', $referers[$i]['referrer_id'])
+            ->where('created_at','>=',$referers[$i]['created_at'])
+            ->where('created_at','<=',$referers[$i]['expire_date'])
+            ->sum('referer_price');
+    }
+    return $income;
+
+}
+
+
 
 function getTotalClick()
 {
@@ -219,10 +263,10 @@ function getTotalDaryafti()
 
 }
 
-function getUserIdAfterChecking()
+function getUserIdAfterChecking($guard='user')
 {
-    if (auth('user')->check())
-        return auth('user')->user()->id;
+    if (auth($guard)->check())
+        return auth($guard)->user()->id;
     else
         return getUnknownUserId();
 }
@@ -247,6 +291,13 @@ function getToday()
 
 
     return Carbon::today();
+}
+
+function getNow()
+{
+
+
+    return Carbon::now();
 }
 
 function getYesterday()
@@ -741,6 +792,36 @@ function flash($title = null, $message = null)
     }
     return $flash->info($title, $message);
 }
+
+function SEND_RECOVERY_MAIL($to_name,$to_email,$recovery_link){
+
+    $data = array(
+        "link" => $recovery_link,
+        "name" =>$to_name,
+    );
+
+    Mail::send('mails.recover_password', $data, function ($message) use ($to_name, $to_email) {
+        $message->to($to_email, $to_name)
+            ->subject('فراموشی رمز عبور ');
+        $message->from('adclicki.ir@gmail.com', '[ADCLICKI.IR]');
+    });
+}
+
+function SEND_MESSAGE_WITH_MAIL($to_name,$to_email,$title,$description){
+
+    $data = array(
+        "name" => $to_name,
+        "title" => $title,
+        "description" =>$description,
+    );
+
+    Mail::send('mails.message', $data, function ($message) use ($to_name, $to_email,$title) {
+        $message->to($to_email, $to_name)
+            ->subject($title);
+        $message->from('adclicki.ir@gmail.com', '[ADCLICKI.IR]');
+    });
+}
+
 
 function SEND_SMS($mobile, $message)
 {

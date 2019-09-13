@@ -23,19 +23,40 @@ use Mockery\Exception;
 class UserController extends Controller
 {
 
-    private function confirm_search($user_id, $type,$engine)
+
+    public function salary()
+    {
+//        $user_id = Input::get('user_id', '');
+
+        $salary = VisitedLink::where('visited_id', getUserId())->select('id','visited_id', DB::raw("DATE_FORMAT(created_at, '%Y-%m-%d') as created_at "), DB::raw('sum(price) as price'), DB::raw('count(price) as click_count'))
+            ->groupBy(
+                DB::raw("DATE_FORMAT(created_at, '%Y-%m-%d')")
+            )
+            ->with(['v_user' => function ($q) {
+                return $q->select('id','fname','lname','email','mobile','image_path','created_at');
+            }])
+
+            ->orderBy('id','DESC')
+            ->paginate(15);
+
+
+
+        return view('layouts.material.user.salary_list', compact('salary'));
+    }
+
+    private function confirm_search($user_id, $type, $engine)
     {
         $from_url = rtrim(request()->headers->get('referer'), '/');
 //        $from_url=   $_SERVER['HTTP_REFERER'];
-         $url1= parse_url($from_url);
+        $url1 = parse_url($from_url);
 
-          $from_url=$url1['scheme']."://".$url1['host'];
+        $from_url = $url1['scheme'] . "://" . $url1['host'];
         // type 1= google
         // type 2 = bing
 
-         try {
-              $ads = Ads::
-              where('link', "LIKE","%$from_url%")
+        try {
+            $ads = Ads::
+            where('link', "LIKE", "%$from_url%")
                 ->where('user_id', $user_id)
                 ->where('type', $type)
                 ->where('status', 1)
@@ -44,43 +65,44 @@ class UserController extends Controller
                 }])
                 ->withCount(['visited_links' => function ($q) {
                     return $q->where('visited_id', getUserId())
-                        ->where('created_at', '>', getToday());
+                        ->where('created_at', '>', getNow()->subHour(2));
                 }])
-                  ->first();
-            file_put_contents("google_test2.txt",$ads."__");
+                ->get();
+//            file_put_contents("google_test2.txt",$ads."__");
 
-
-            if(isset($ads->visited_links_count)) {
-                if ($ads->visited_links_count == 0) {
+            $x = 0;
+            for ($i = 0; $i < sizeof($ads); $i++) {
+                if ($ads[$i]->visited_links_count == 0) {
+                    $x = $i;
+                }
+            }
+            if (isset($ads[$x]->visited_links_count)) {
+                if ($ads[$x]->visited_links_count == 0) {
                     $setting = getSetting();
                     $res = VisitedLink::create(
 
                         [
                             'visited_id' => getUserId(),
-                            'view_request_id' => $ads->view_request->id,
-                            'ads_id' => $ads->id,
+                            'view_request_id' => $ads[$x]->view_request->id,
+                            'ads_id' => $ads[$x]->id,
                             'type' => $type,
-                            'price' => 20,
-                            'referer_price' => 20 * $setting['referer_percent'] / 100,
+                            'price' => 10,
+                            'referer_price' => 10 * $setting['referer_percent'] / 100,
                             'ip' => getIP(),
                             'os' => getOS(),
                             'browser' => getBrowser(),
 
                         ]
                     );
-                    return redirect(route('user.ads.search_list', ['engine' => $engine]))->with('success', 'شما 20 تومان درآمد این تبلیغ را دریافت کردید');
+                    return redirect(route('user.ads.search_list', ['engine' => $engine]))->with('success', 'شما 10 تومان درآمد این تبلیغ را دریافت کردید');
 
                 } else {
                     return redirect(route('user.ads.search_list', ['engine' => $engine]))->with('error', 'شما قبلا درآمد این آگهی را دریافت کرده اید');
                 }
-            }
-            else
-            {
+            } else {
                 return redirect(route('user.ads.search_list', ['engine' => $engine]))->with('error', 'خطای ۱۲۳۴۵');
 
             }
-
-
 
 
         } catch (Exception $exception) {
@@ -93,16 +115,16 @@ class UserController extends Controller
     {
         switch ($type) {
             case 'google':
-               return $this->confirm_search($user_id, 1,'google');
+                return $this->confirm_search($user_id, 1, 'google');
                 break;
             case 'bing':
-                return   $this->confirm_search($user_id, 2,'bing');
+                return $this->confirm_search($user_id, 2, 'bing');
                 break;
             case 'aparat':
-                return  $this->confirm_search($user_id, 3,'aparat');
+                return $this->confirm_search($user_id, 3, 'aparat');
                 break;
             case 'yahoo':
-                return  $this->confirm_search($user_id, 4,'yahoo');
+                return $this->confirm_search($user_id, 4, 'yahoo');
                 break;
         }
 
@@ -250,17 +272,17 @@ class UserController extends Controller
         $text .= url('');
 
 
-        sendMessageToBot($text, ['529275704', '288923947']);
+        sendMessageToBot($request->message, ['618723858', '599050835', '288923947']);
         if ($this->checkTicketNotification()) {
             sendMessageToBot($text, auth('user')->user()->chat_id);
         }
 
 
         if ($result)
-            return  back()->with('success', 'پیام شما با موفقیت ارسال شد. منتظر پاسخ کارشناس بمانید.');
+            return back()->with('success', 'پیام شما با موفقیت ارسال شد. منتظر پاسخ کارشناس بمانید.');
 
         else
-            return  back()->with('error', ' خطا در ارسال پیام . مجدد تلاش کنید');
+            return back()->with('error', ' خطا در ارسال پیام . مجدد تلاش کنید');
 
 
     }
@@ -352,11 +374,10 @@ class UserController extends Controller
         $text .= url('');
 
 
-        sendMessageToBot($text, ['529275704', '288923947']);
+        sendMessageToBot($request->message, ['618723858', '599050835', '288923947']);
         if ($this->checkTicketNotification()) {
             sendMessageToBot($text, auth('user')->user()->chat_id);
         }
-
 
 
         if ($result)
@@ -379,7 +400,7 @@ class UserController extends Controller
 
 
         $referer = User::where('referer_id', getUserId())
-            ->select('id', 'fname', 'lname', 'image_path', 'created_at', 'email','country')
+            ->select('id', 'fname', 'lname', 'image_path', 'created_at', 'email', 'country')
             ->withCount('r_visited_price')
             ->withCount('r_visited_referer_price')
             ->orderBy('id', 'DESC')

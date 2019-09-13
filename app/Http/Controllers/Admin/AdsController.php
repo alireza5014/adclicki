@@ -6,8 +6,10 @@ use App\classes\UpLoad;
 use App\Http\Requests\AdsRequest;
 use App\Model\Ads;
 use App\Model\ViewRequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
 use Mockery\Exception;
 
 class AdsController extends Controller
@@ -17,17 +19,30 @@ class AdsController extends Controller
     public function clicki_list(Request $request)
     {
 
+        $publish = Input::get('publish', 0);
+        $verify = Input::get('verify', 0);
+
         $ads = Ads::orderBy('id', 'DESC')
-            ->with(['view_request' => function ($q) {
-                return $q->select('id', 'ads_id', 'count', 'status');
+            ->with(['view_request' => function ($q)use ($verify) {
+
+                if ($verify != 0) {
+                    return $q->select('id', 'ads_id', 'count', 'status')->where('status', $verify);
+                }
+                 return $q->select('id', 'ads_id', 'count', 'status');
+
+
             }])
             ->with(['user' => function ($q) {
-                return $q->select('id', 'fname', 'lname', 'email','mobile','created_at');
+                return $q->select('id', 'fname', 'lname', 'email', 'mobile', 'created_at');
             }])
             ->where('type', 0)
+
             ->withCount('visited_links')
-            ->withCount('visited_websites')
-            ->paginate(20);
+            ->withCount('visited_websites');
+        if ($publish != 0) {
+            $ads->where('status', $publish);
+        }
+        $ads = $ads->paginate(30);
 
         if ($request->ajax()) {
             try {
@@ -47,13 +62,13 @@ class AdsController extends Controller
                 return $q->select('id', 'ads_id', 'count', 'status');
             }])
             ->with(['user' => function ($q) {
-                return $q->select('id', 'fname', 'lname', 'email','mobile','created_at');
+                return $q->select('id', 'fname', 'lname', 'email', 'mobile', 'created_at');
             }])
             ->withCount('visited_links')
             ->with(['google_search' => function ($q) {
                 return $q->select('id', 'ads_id', 'keyword', 'page_number');
             }])
-            ->whereIn('type', [1,2])
+            ->whereIn('type', [1, 2])
             ->paginate(20);
 
         if ($request->ajax()) {
@@ -103,8 +118,24 @@ class AdsController extends Controller
     {
 
         try {
-            $ads = Ads::select('status')->find($id);
+            $ads = Ads::with('user')->select('user_id','status')->find($id);
+            if($ads->status==-1){
+                $text="آگهی شما باموفقیت تایید شد";
+                $text.="\n";
+                $text.=verta(Carbon::now());
+                $text.="\n";
+                $text.=url('');
+                $text.="\n";
+                $subject = "تایید آگهی " . $ads->title;
+                $text.="\n";
+
+                SEND_MESSAGE_WITH_MAIL($ads->user->fname . " " . $ads->user->lname, $ads->user->email, $subject, $text);
+
+            }
+
             Ads::where('id', $id)->update(['status' => -$ads->status]);
+
+
             return response()->json(
                 [
                     'status' => 1,
@@ -114,6 +145,7 @@ class AdsController extends Controller
                 , 200
             );
         } catch (\Exception $e) {
+            file_put_contents("errors.txt", $e->getMessage().$ads);
 
         }
 

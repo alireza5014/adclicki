@@ -46,7 +46,7 @@
                         <div class="col-sm-6">
 
                             <div class="form-group form-group--float ">
-                                <input id="shaba_number" type="text" class="form-control" name="shaba_number"
+                                <input id="shaba_number" type="text" class="form-control" name="shaba_number" placeholder="IR585983110294972312121233"
                                        value="{{$user->shaba_number}}">
 
 
