@@ -18,8 +18,7 @@
 
                         <th> تاریخ خرید زیر مجموعه</th>
                         <th> تاریخ انقضا</th>
-                        <th> مدیریت</th>
-                        <th> مدیریت</th>
+                        <th>   مدیریت</th>
 
 
                     </tr>
@@ -42,20 +41,8 @@
                             {{--<td>{{$subcategory->price}}</td>--}}
                             <td>{{verta($subcategory->created_at)}}</td>
                             <td>{{verta($subcategory->expire_date)}}</td>
+                            <td><a href="{{route('admin.subcategory.refresh',['id'=>$subcategory->id])}}" class="btn btn-warning"><i class="zmdi zmdi-refresh-sync" ></i></a> </td>
 
-
-                            @if(getNow()<=$subcategory->expire_date)
-                                @if($subcategory->refresh_count>0)
-                                    <td><a href="{{route('user.subcategory.refresh',['id'=>$subcategory->id])}}"
-                                           class="btn btn-warning"><i class="zmdi zmdi-refresh-sync"></i>تغییر زیرمجموعه
-                                            <span class="text-white bnn btn-sm btn-success">{{$subcategory->refresh_count}}</span>
-                                        </a></td>
-                                @endif
-                                <td><a class="btn btn-success text-white">  فعال</a> </td>
-
-                            @else
-                                <td><a class="btn btn-danger text-white">منقضی شده</a> </td>
-                            @endif
                         </tr>
 
                         <?php $i++ ?>

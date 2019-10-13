@@ -28,17 +28,15 @@ class UserController extends Controller
     {
 //        $user_id = Input::get('user_id', '');
 
-        $salary = VisitedLink::where('visited_id', getUserId())->select('id','visited_id', DB::raw("DATE_FORMAT(created_at, '%Y-%m-%d') as created_at "), DB::raw('sum(price) as price'), DB::raw('count(price) as click_count'))
+        $salary = VisitedLink::where('visited_id', getUserId())->select('id', 'visited_id', DB::raw("DATE_FORMAT(created_at, '%Y-%m-%d') as created_at "), DB::raw('sum(price) as price'), DB::raw('count(price) as click_count'))
             ->groupBy(
                 DB::raw("DATE_FORMAT(created_at, '%Y-%m-%d')")
             )
             ->with(['v_user' => function ($q) {
-                return $q->select('id','fname','lname','email','mobile','image_path','created_at');
+                return $q->select('id', 'fname', 'lname', 'email', 'mobile', 'image_path', 'created_at');
             }])
-
-            ->orderBy('id','DESC')
+            ->orderBy('id', 'DESC')
             ->paginate(15);
-
 
 
         return view('layouts.material.user.salary_list', compact('salary'));
@@ -272,7 +270,12 @@ class UserController extends Controller
         $text .= url('');
 
 
-        sendMessageToBot($request->message, ['618723858', '599050835', '288923947']);
+        $bot_text = $result->ticket_id . "|\n";
+        $bot_text .= auth('user')->user()->fname . " ";
+        $bot_text .= auth('user')->user()->lname . "\n";
+        $bot_text .= $request->message . "\n";
+
+        sendMessageToBot($bot_text, admin_bot_id());
         if ($this->checkTicketNotification()) {
             sendMessageToBot($text, auth('user')->user()->chat_id);
         }
@@ -373,8 +376,11 @@ class UserController extends Controller
         $text .= "منتظر پاسخ پشتیبان باشید";
         $text .= url('');
 
-
-        sendMessageToBot($request->message, ['618723858', '599050835', '288923947']);
+        $bot_text = $result->id . "|\n";
+        $bot_text .= auth('user')->user()->fname . " ";
+        $bot_text .= auth('user')->user()->lname . "\n";
+        $bot_text .= $request->message . "\n";
+        sendMessageToBot($bot_text, admin_bot_id());
         if ($this->checkTicketNotification()) {
             sendMessageToBot($text, auth('user')->user()->chat_id);
         }

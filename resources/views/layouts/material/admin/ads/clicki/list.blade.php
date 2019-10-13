@@ -49,6 +49,7 @@
 
                             <div class="col-md-6">
                                 <input
+                                        checked
                                         name="telegram"
                                         id="telegram"
                                         data-size="small"
@@ -58,7 +59,20 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label for="name" class="col-md-6 control-label"> ارسال به ایمیل : </label>
 
+                            <div class="col-md-6">
+                                <input
+                                        checked
+                                        name="email"
+                                        id="email"
+                                        data-size="small"
+                                        type="checkbox"
+                                        data-plugin="switchery"
+                                        data-color="#00b19d"/>
+                            </div>
+                        </div>
                         <div class="form-group">
 
                             <div class="col-md-12">

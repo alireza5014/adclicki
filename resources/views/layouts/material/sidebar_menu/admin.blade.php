@@ -118,6 +118,12 @@
                     </a>
                 </li>
 
+                <li class="@@sidebaractive"><a href="{{route('users_list',['type'=>'subcategory'])}}">
+                            کاربران زیر مجموعه دار
+
+                    </a>
+                </li>
+
             </ul>
         </li>
 

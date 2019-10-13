@@ -41,17 +41,23 @@ class UserController extends Controller
     }
 
 
-    public function list()
+    public function list($type='all')
     {
 
         $search = Input::get('search', '');
 
-        $users = User::where('is_admin', 0)->SearchByKeyword($search)
+         $users = User::where('is_admin', 0)->SearchByKeyword($search)
             ->withCount('visited_links')
             ->withCount('referers')
             ->groupBy('users.id')
-            ->orderBy('id', 'DESC')
-            ->paginate(50);
+            ->orderBy('id', 'DESC');
+        if($type!='all'){
+
+
+            $users= $users->whereHas('getSubcategories')->withCount('getSubcategories')  ;
+        }
+        $users=$users->paginate(50);
+
 
 //        foreach ($users as $user) {
 //            if ($user->id > 1 && $user->id < 100) {

@@ -20,6 +20,7 @@ use App\User;
 use Carbon\Carbon;
 use Hekmatinasser\Verta\Facades\Verta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -166,7 +167,6 @@ class AdminController extends Controller
 
     public function index()
     {
-
 
         $data = [
             'همه کاربران' => User::count(),

@@ -42,11 +42,19 @@
                                 {{$ad->title}}
 
                                 <br/>
-
                                 <a href="{{$ad->link}}" target="_blank">  {{$ad->link}}  </a>
+
+                                <br/>
+                                <a> رنک الکسا (ایران) :<span
+                                            class="text-danger">{{getAlexaRank($ad->link)['iran']}}</span> ‌</a>
+                                <br/>
+                                <a> رنک الکسا (جهان) :<span
+                                            class="text-black-50">{{getAlexaRank($ad->link)['global']}}</span> ‌</a>
+                                <br/>
+                                <a target="_blank" class="btn btn-sm btn-primary"
+                                   href="https://www.alexa.com/siteinfo/{{$ad->link}}"> مشاهده رنک در سایت الگسا</a>
+
                             </td>
-
-
 
 
                             <td>{{$ad->daily_click}}</td>

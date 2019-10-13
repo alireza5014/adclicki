@@ -1,0 +1,1 @@
+Connection could not be established with host smtp.googlemail.com [php_network_getaddresses: getaddrinfo failed: nodename nor servname provided, or not known #0]

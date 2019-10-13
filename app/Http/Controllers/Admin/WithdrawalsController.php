@@ -69,7 +69,7 @@ class WithdrawalsController extends Controller
             sendMessageToBot($text, $user->chat_id);
         }
 
-        sendMessageToBot($text, ['618723858', '288923947']);
+        sendMessageToBot($text, admin_bot_id());
 
         return back()->with('success', 'اطلاعات با موفقیت ثبت شد');
 

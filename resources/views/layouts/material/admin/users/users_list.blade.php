@@ -146,8 +146,12 @@
 
 
                                         <td>{{$user->email}}</td>
-                                        <td>{{$user->visited_links_count}}</td>
-                                        <td>{{$user->referers_count}}</td>
+                                        <td>{{$user->visited_links_count}}
+                                        </td>
+                                        <td>دعوت شده :{{$user->referers_count}}
+                                            <br/>
+                                            خریداری شده :{{$user->get_subcategories_count}}
+                                        </td>
 
                                         <td>{{$user->created_at}}</td>
 
@@ -160,7 +164,8 @@
                                             <a href="{{route('edit_user',['id'=>$user->id])}}"><span
                                                         class="btn btn-info btn-xs >"> <i class="zmdi zmdi-edit"></i></span></a>
 
-                                            <a href="{{url('admin/users/salary').'?user_id='.$user->id}}"   class="btn btn-info" target="_blank">ریز درآمد  کاربر</a>
+                                            <a href="{{url('admin/users/salary').'?user_id='.$user->id}}"   class="btn btn-info" >ریز درآمد  کاربر</a>
+                                            <a href="{{route('admin.subcategory.list').'?user_id='.$user->id}}"   class="btn btn-success" >زیر مجموعه های کاربر     </a>
 
                                         </td>
 

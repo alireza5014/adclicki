@@ -11,6 +11,7 @@ use App\Ticket;
 use App\User;
 use Carbon\Carbon;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Mail;
@@ -20,7 +21,38 @@ use Intervention\Image\ImageManagerStatic as Image;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
+function getAlexaRank($url)
+{
 
+
+
+
+
+    $ranks = Cache::remember($url, 60 * 60 * 24, function () use ($url) {
+
+        try{
+            $string = file_get_contents("https://www.alexa.com/siteinfo/" . $url);
+
+        }
+        catch (Exception $e){
+            $string='';
+        }
+        $global = substr($string, strpos($string, 'rankmini-rank'), 100);
+        $iran = substr($string, strpos($string, '🇮🇷 Iran'), 100);
+        $iran = (int)filter_var($iran, FILTER_SANITIZE_NUMBER_INT);
+        $global = (int)filter_var($global, FILTER_SANITIZE_NUMBER_INT);
+        return ["iran" => abs($iran), "global" => abs($global)];
+
+
+    });
+
+
+    return $ranks;
+
+}
+function admin_bot_id(){
+ return   ['618723858', '599050835', '288923947'];
+}
 function website_status($status)
 {
     switch ($status) {
@@ -165,7 +197,8 @@ function getSetting($field = 'all')
 
 function getTotalBalance($user_id)
 {
-    return Payment::where('user_id', $user_id)->sum('price') + getTotalIncome($user_id) + getRefererIncome($user_id)+getTotalWebsite()+getSubCategoryIncome($user_id);
+
+    return Payment::where('user_id', $user_id)->sum('price') + getTotalIncome($user_id) + getRefererIncome($user_id)+getTotalWebsite('all',$user_id)+getSubCategoryIncome($user_id);
 
 }
 
@@ -202,6 +235,12 @@ function getReferercount($user_id)
 
 }
 
+function getSubcategoryCount($user_id)
+{
+    return Subcategory::where('user_id', $user_id)->count();
+
+}
+
 function getRefererIncome($user_id)
 {
 
@@ -235,10 +274,14 @@ function getTotalClick()
 
 }
 
-function getTotalWebsite($type = 'all')
+function getTotalWebsite($type = 'all',$user_id=0)
 {
-      $res= VisitedWebsite::whereHas('website',function ($q){
-         $q->where('user_id', getUserId());
+    if($user_id==0){
+        $user_id=getUserId();
+    }
+
+      $res= VisitedWebsite::whereHas('website',function ($q) use ($user_id){
+         $q->where('user_id', $user_id);
      });
          if($type!='all'){
              $res->where('type', $type);
@@ -274,6 +317,12 @@ function getUserIdAfterChecking($guard='user')
 function getUserId($guard = 'user')
 {
     return auth($guard)->user()->id;
+}
+
+
+function getUserActivityType($guard = 'user')
+{
+    return auth($guard)->user()->activity_type;
 }
 
 function getAdminUserId()
@@ -815,11 +864,16 @@ function SEND_MESSAGE_WITH_MAIL($to_name,$to_email,$title,$description){
         "description" =>$description,
     );
 
-    Mail::send('mails.message', $data, function ($message) use ($to_name, $to_email,$title) {
-        $message->to($to_email, $to_name)
-            ->subject($title);
-        $message->from('adclicki.ir@gmail.com', '[ADCLICKI.IR]');
-    });
+  try{  Mail::send('mails.message', $data, function ($message) use ($to_name, $to_email,$title) {
+      $message->to($to_email, $to_name)
+          ->subject($title);
+      $message->from('adclicki.ir@gmail.com', '[ADCLICKI.IR]');
+  });
+  }
+  catch (Exception $e){
+      file_put_contents("error.txt",$e->getMessage());
+
+  }
 }
 
 

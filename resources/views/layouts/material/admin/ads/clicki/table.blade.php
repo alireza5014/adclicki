@@ -13,16 +13,15 @@
                         <th>تصویر</th>
 
 
-                        <th>عنوان</th>
                         <th> محدودیت روزانه</th>
 
 
-                        <th> تعداد کلیک های درخواست شده</th>
-                        <th> تعداد کلیک های انجام شده</th>
-                        <th>مانده تعداد کلیک</th>
+                        <th>  درخواست شده</th>
+                        <th>  انجام شده</th>
+                        <th>مانده </th>
 
-                        <th> وضعیت تایید</th>
-                        <th> وضعیت انشار</th>
+                        <th>   تایید</th>
+                        <th>   انشار</th>
                         <th> زمان</th>
 
 
@@ -37,6 +36,7 @@
 
                             <td>
 
+                                <p>  {{$ad->title}}  </p>
 
                                 {{$ad->user->fname." ".$ad->user->lname}}
                                 <br>
@@ -55,11 +55,6 @@
                                 <a href="{{$ad->link}}" target="_blank">  آدرس سایت  </a>
 
 
-                            </td>
-
-
-                            <td>
-                                <p>  {{$ad->title}}  </p>
                             </td>
 
 
@@ -115,13 +110,11 @@
                                 @endif
                             </td>
                             <td>{{$ad->created_at}}</td>
-                            <td><a href="{{route('user.ads.delete',['id'=>$ad->id])}}" class="btn btn-xs btn-danger">DELETE</a>
-                            </td>
+                            <td><a href="{{route('user.ads.delete',['id'=>$ad->id])}}" class="btn btn-xs btn-danger"><i class="zmdi zmdi-delete"></i></a>
 
-                            <td>
                                 <a onclick="send_message('{{$ad->user->id}}','{{$ad->user->fname." ".$ad->user->lname}}')"
                                    data-toggle="modal" data-target="#send_message"
-                                   class="btn btn-xs btn-primary">ارسال پیام</a></td>
+                                   class="btn btn-xs btn-primary text-white">  <i class="zmdi zmdi-mail-send"></i> </a></td>
 
                         </tr>
 

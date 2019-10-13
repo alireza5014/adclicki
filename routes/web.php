@@ -50,6 +50,8 @@ Route::get('/contact_us', 'SiteController@contact_us')->name('site.contact_us');
 Route::get('/learning', 'SiteController@learning')->name('site.learning');
 Route::get('/test', 'SiteController@test')->name('site.test');
 Route::get('/test2', 'SiteController@test2')->name('site.test2');
+Route::any('/instagram_callback', 'SiteController@instagram_callback')->name('site.instagram_callback');
+Route::get('/test_instagram', 'SiteController@instagarm1')->name('site.instagarm1');
 
 
 
@@ -235,11 +237,18 @@ Route::group(['prefix' => '/user'], function () {
 
 
 
+
+
         Route::get('/subcategory/list', 'User\SubCategoryController@list')->name('user.subcategory.list');
         Route::get('/subcategory/new', 'User\SubCategoryController@new')->name('user.subcategory.new');
         Route::post('/subcategory/create', 'User\SubCategoryController@create')->name('user.subcategory.create');
 
+        Route::get('/subcategory/refresh/{id}', 'User\SubCategoryController@refresh')->name('user.subcategory.refresh');
 
+
+
+
+        Route::get('/forums/list', 'User\ForumController@list')->name('user.forums.list');
 
 
     });
@@ -308,7 +317,7 @@ Route::group(['prefix' => '/admin'], function () {
 
 
         Route::get('/create/user', 'Admin\UserController@new')->name('create_user');
-        Route::get('/users/list', 'Admin\UserController@list')->name('users_list');
+        Route::get('/users/list/{type?}', 'Admin\UserController@list')->name('users_list');
         Route::get('/users/message/list', 'Admin\UserController@message_list')->name('users_message_list');
         Route::post('/users/send_message_to_user', 'Admin\UserController@send_message_to_user')->name('admin.send_message_to_user');
         Route::post('/users/send_message_to_all_user', 'Admin\UserController@send_message_to_all_user')->name('admin.send_message_to_all_user');
@@ -356,6 +365,11 @@ Route::group(['prefix' => '/admin'], function () {
         Route::get('/website/delete/{id}', 'Admin\WebsiteController@delete')->name('admin.website.delete');
 
 
+
+        Route::get('/subcategory/list', 'Admin\SubCategoryController@list')->name('admin.subcategory.list');
+        Route::get('/subcategory/refresh/{id}', 'Admin\SubCategoryController@refresh')->name('admin.subcategory.refresh');
+        Route::post('/subcategory/create', 'Admin\SubCategoryController@create')->name('user.admin.create');
+        Route::get('/subcategory/add_subcategory', 'Admin\SubCategoryController@add_subcategory')->name('admin.subcategory.add_subcategory');
 
 
 

@@ -11,6 +11,7 @@ if (auth('admin')->check()) {
 $path = url('template/material');
 ?>
 
+<?php $activity_type = auth($guard)->user()->activity_type; ?>
         <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,7 +44,8 @@ $path = url('template/material');
         bottom: 2.65rem !important;
 
     }
-    .header{
+
+    .header {
         height: 35px !important;
     }
 
@@ -96,7 +98,6 @@ $path = url('template/material');
         </div>
 
 
-
         <?php
         $messages = \App\Model\Message::whereHas('users', function ($q) use ($guard) {
             return $q->where('users.id', getUserId($guard));
@@ -114,89 +115,100 @@ $path = url('template/material');
             {{--<li class="hidden-xl-up"><a href="" data-ma-action="search-open"><i class="zmdi zmdi-search"></i></a>--}}
             {{--</li>--}}
 
-            <li class="dropdown">
-                <a href="" data-toggle="dropdown" class="btn-warning">
-                    کسب درآمد
-                </a>
-                <div class="dropdown-menu dropdown-menu-left " style="    width: 250px;
+            @if($activity_type==0 || $activity_type==2)
+
+                <li class="dropdown">
+                    <a href="" data-toggle="dropdown" class="btn-warning">
+                        کسب درآمد
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-left " style="    width: 250px;
     top: 30px;">
-                    <div class="listview listview--hover">
+                        <div class="listview listview--hover">
 
 
-                        <a href="{{route('user.ads.site_list')}}" class="view-more">کسب درآمد از طریق کلیک
-                            <span class="badge badge-pill badge-danger ">    {{getTodayUnClickedLink(getUserId($guard),0)}}</span>
-                        </a>
-                        <a href="{{route('user.ads.search_list',['engine'=>'google'])}}" class="view-more">کسب درآمد از
-                            سرچ گوگل
-                            <span class="badge badge-pill badge-danger ">    {{getTodayUnClickedLink(getUserId($guard),1)}}</span>
-                        </a>
-                        <a href="{{route('user.ads.search_list',['engine'=>'bing'])}}" class="view-more">کسب درآمد از
-                            سرچ بینگ
-                            <span class="badge badge-pill badge-danger ">    {{getTodayUnClickedLink(getUserId($guard),2)}}</span>
-                        </a>
-                        <a href="{{route('user.ads.search_list',['engine'=>'yahoo'])}}" class="view-more">کسب درآمد از
-                            سرچ یاهو
-                            <span class="badge badge-pill badge-danger ">    {{getTodayUnClickedLink(getUserId($guard),3)}}</span>
-                        </a>
-                        <a href="{{route('user.ads.search_list',['engine'=>'aparat'])}}" class="view-more">کسب درآمد از
-                            سرچ آپارات
-                            <span class="badge badge-pill badge-danger ">    {{getTodayUnClickedLink(getUserId($guard),4)}}</span>
-                        </a>
+                            <a href="{{route('user.ads.site_list')}}" class="view-more">کسب درآمد از طریق کلیک
+                                <span class="badge badge-pill badge-danger ">    {{getTodayUnClickedLink(getUserId($guard),0)}}</span>
+                            </a>
+                            <a href="{{route('user.ads.search_list',['engine'=>'google'])}}" class="view-more">کسب درآمد
+                                از
+                                سرچ گوگل
+                                <span class="badge badge-pill badge-danger ">    {{getTodayUnClickedLink(getUserId($guard),1)}}</span>
+                            </a>
+                            <a href="{{route('user.ads.search_list',['engine'=>'bing'])}}" class="view-more">کسب درآمد
+                                از
+                                سرچ بینگ
+                                <span class="badge badge-pill badge-danger ">    {{getTodayUnClickedLink(getUserId($guard),2)}}</span>
+                            </a>
+                            <a href="{{route('user.ads.search_list',['engine'=>'yahoo'])}}" class="view-more">کسب درآمد
+                                از
+                                سرچ یاهو
+                                <span class="badge badge-pill badge-danger ">    {{getTodayUnClickedLink(getUserId($guard),3)}}</span>
+                            </a>
+                            <a href="{{route('user.ads.search_list',['engine'=>'aparat'])}}" class="view-more">کسب درآمد
+                                از
+                                سرچ آپارات
+                                <span class="badge badge-pill badge-danger ">    {{getTodayUnClickedLink(getUserId($guard),4)}}</span>
+                            </a>
 
-                        <a href="" class="view-more">
-                            کسب درآمد از اینستاگرام
-                            <span class="badge badge-pill badge-danger ">    بزودی</span>
-                        </a>
+                            <a href="" class="view-more">
+                                کسب درآمد از اینستاگرام
+                                <span class="badge badge-pill badge-danger ">    بزودی</span>
+                            </a>
 
 
+                        </div>
                     </div>
-                </div>
-            </li>
-            <li class="">
-                <a href="{{url('user/payments/buy/click')}}" class="btn btn-primary">
-                    خرید کلیک
-                </a>
-            </li>
+                </li>
+            @endif
 
 
-            <li class="dropdown">
-                <a href="" data-toggle="dropdown" class="btn-success">
-                    ثبت تبلیغ
-                </a>
-                <div class="dropdown-menu dropdown-menu-left " style="    width: 250px;
+            @if($activity_type==1 || $activity_type==2)
+                <li class="">
+                    <a href="{{url('user/payments/buy/click')}}" class="btn btn-primary">
+                        خرید کلیک
+                    </a>
+                </li>
+
+                <li class="dropdown">
+                    <a href="" data-toggle="dropdown" class="btn-success">
+                        ثبت تبلیغ
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-left " style="    width: 250px;
     top: 30px;">
-                    <div class="listview listview--hover">
+                        <div class="listview listview--hover">
 
 
-                        <a href="{{route('user.ads.clicki.new')}}" class="view-more">ثبت تبلیغ کلیکی</a>
-                        <a href="{{route('user.ads.google_search.new')}}" class="view-more">ثبت تبلیغ جستجو(گوگل - بینگ
-                            - یاهو)</a>
-                        <a href="" class="view-more">ثبت تبلیغ پاپ آپ (بزودی)</a>
+                            <a href="{{route('user.ads.clicki.new')}}" class="view-more">ثبت تبلیغ کلیکی</a>
+                            <a href="{{route('user.ads.google_search.new')}}" class="view-more">ثبت تبلیغ جستجو(گوگل -
+                                بینگ
+                                - یاهو)</a>
+                            <a href="" class="view-more">ثبت تبلیغ پاپ آپ (بزودی)</a>
 
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
 
 
-            <li class="dropdown">
-                <a href="" data-toggle="dropdown" class="btn-danger">
-                    لیست تبلیغات
-                </a>
-                <div class="dropdown-menu dropdown-menu-left  " style="    width: 250px;
+                <li class="dropdown">
+                    <a href="" data-toggle="dropdown" class="btn-danger">
+                        لیست تبلیغات
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-left  " style="    width: 250px;
     top: 30px;">
-                    <div class="listview listview--hover">
+                        <div class="listview listview--hover">
 
 
-                        <a href="{{route('user.ads.clicki.list')}}" class="view-more">لیست تبلیغات کلیکی</a>
-                        <a href="{{route('user.ads.google_search.list')}}" class="view-more">لیست تبلیغات جستجو(گوگل -
-                            بینگ - یاهو)</a>
-                        <a href="" class="view-more">لیست تبلیغات پاپ آپ (بزودی)</a>
+                            <a href="{{route('user.ads.clicki.list')}}" class="view-more">لیست تبلیغات کلیکی</a>
+                            <a href="{{route('user.ads.google_search.list')}}" class="view-more">لیست تبلیغات جستجو(گوگل
+                                -
+                                بینگ - یاهو)</a>
+                            <a href="" class="view-more">لیست تبلیغات پاپ آپ (بزودی)</a>
 
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
 
-
+            @endif
             <li class="dropdown">
                 <a href="" data-toggle="dropdown"><i class="zmdi zmdi-email"></i></a>
                 <div class="dropdown-menu dropdown-menu-left dropdown-menu--block">
@@ -481,102 +493,111 @@ $path = url('template/material');
 
         @if($guard=='user')
 
-            <div class="row group hidden-xs-down">
-                <a class="col-sm-6 col-md-3">
-                    <div class="quick-stats__item bg-success">
+            @if($activity_type==0 || $activity_type==2)
 
-                        <div class="quick-stats__info">
-                            <h6 class="color-white">{{convert_to_digit(number_format(getTotalBalance(getUserId())))}} <span>تومان</span></h6>
-                            <small style="font-size: 12px"> موجودی کل</small>
+                <div class="row group hidden-xs-down">
+                    <a class="col-sm-6 col-md-3">
+                        <div class="quick-stats__item bg-success">
+
+                            <div class="quick-stats__info">
+                                <h6 class="color-white">{{convert_to_digit(number_format(getTotalBalance(getUserId())))}}
+                                    <span>تومان</span></h6>
+                                <small style="font-size: 12px"> موجودی کل</small>
+                            </div>
+
                         </div>
+                    </a>
 
-                    </div>
-                </a>
+                    <a class="col-sm-6 col-md-3">
+                        <div class="quick-stats__item bg-success">
 
-                <a class="col-sm-6 col-md-3">
-                    <div class="quick-stats__item bg-success">
+                            <div class="quick-stats__info">
+                                <h6 class="color-white">{{convert_to_digit(number_format(getTotalWebsite()))}} <span>تومان</span>
+                                </h6>
+                                <small style="font-size: 12px"> مجموع درآمد وب سایت ها</small>
+                            </div>
 
-                        <div class="quick-stats__info">
-                            <h6 class="color-white">{{convert_to_digit(number_format(getTotalWebsite()))}} <span>تومان</span></h6>
-                            <small style="font-size: 12px">   مجموع درآمد وب سایت ها</small>
                         </div>
+                    </a>
 
-                    </div>
-                </a>
+                    <a class="col-sm-6 col-md-3">
 
-                <a class="col-sm-6 col-md-3">
+                        <div class="quick-stats__item bg-info">
 
-                    <div class="quick-stats__item bg-info">
+                            <div class="quick-stats__info">
+                                <h6 class="color-white">{{convert_to_digit(number_format(getTotalDaryafti()))}} <span>تومان</span>
+                                </h6>
+                                <small style="font-size: 12px"> مجموع دریافتی ها</small>
+                            </div>
 
-                        <div class="quick-stats__info">
-                            <h6 class="color-white">{{convert_to_digit(number_format(getTotalDaryafti()))}} <span>تومان</span></h6>
-                            <small style="font-size: 12px"> مجموع دریافتی ها</small>
                         </div>
+                    </a>
 
-                    </div>
-                </a>
+                    <a class="col-sm-6 col-md-3">
 
-                <a class="col-sm-6 col-md-3">
+                        <div class="quick-stats__item bg-primary">
 
-                    <div class="quick-stats__item bg-primary">
+                            <div class="quick-stats__info">
+                                <h6 class="color-white">{{convert_to_digit(number_format(getTotalIncome(getUserId())))}}
+                                    <span>تومان</span></h6>
+                                <small style="font-size: 12px"> درآمد شما از کلیک و جستجوی گوگل(کل)</small>
+                            </div>
 
-                        <div class="quick-stats__info">
-                            <h6 class="color-white">{{convert_to_digit(number_format(getTotalIncome(getUserId())))}} <span>تومان</span></h6>
-                            <small style="font-size: 12px"> درآمد شما از کلیک و جستجوی گوگل(کل) </small>
                         </div>
-
-                    </div>
-                </a>
+                    </a>
 
 
-                <a class="col-sm-6 col-md-3">
+                    <a class="col-sm-6 col-md-3">
 
-                    <div class="quick-stats__item bg-primary">
+                        <div class="quick-stats__item bg-primary">
 
-                        <div class="quick-stats__info">
-                            <h6 class="color-white">{{convert_to_digit(number_format(getTotalIncome(getUserId(),'today')))}} <span>تومان</span></h6>
-                            <small style="font-size: 12px"> درآمد شما از کلیک و جستجوی گوگل(امروز) </small>
+                            <div class="quick-stats__info">
+                                <h6 class="color-white">{{convert_to_digit(number_format(getTotalIncome(getUserId(),'today')))}}
+                                    <span>تومان</span></h6>
+                                <small style="font-size: 12px"> درآمد شما از کلیک و جستجوی گوگل(امروز)</small>
+                            </div>
+
                         </div>
+                    </a>
+                    <a class="col-sm-6 col-md-3">
+                        <div class="quick-stats__item bg-warning">
 
-                    </div>
-                </a>
-                <a class="col-sm-6 col-md-3">
-                    <div class="quick-stats__item bg-warning">
+                            <div class="quick-stats__info">
+                                <h6 class="color-white">{{convert_to_digit(getTotalClick())}} <span>عدد</span></h6>
+                                <small style="font-size: 12px"> موجودی کلیک ها</small>
+                            </div>
 
-                        <div class="quick-stats__info">
-                            <h6 class="color-white">{{convert_to_digit(getTotalClick())}} <span>عدد</span></h6>
-                            <small style="font-size: 12px"> موجودی کلیک ها</small>
                         </div>
+                    </a>
 
-                    </div>
-                </a>
+                    <a class="col-sm-6 col-md-3">
+                        <div class="quick-stats__item bg-grey">
 
-                <a class="col-sm-6 col-md-3">
-                    <div class="quick-stats__item bg-grey">
+                            <div class="quick-stats__info">
+                                <h6 class="color-white">{{convert_to_digit(getTotalClick()/5)}} <span>عدد</span></h6>
+                                <small style="font-size: 12px"> موجودی جستجو ها</small>
+                            </div>
 
-                        <div class="quick-stats__info">
-                            <h6 class="color-white">{{convert_to_digit(getTotalClick()/5)}} <span>عدد</span></h6>
-                            <small style="font-size: 12px"> موجودی جستجو ها</small>
                         </div>
+                    </a>
 
-                    </div>
-                </a>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="quick-stats__item bg-blue-grey">
 
-                <div class="col-sm-6 col-md-3">
-                    <div class="quick-stats__item bg-blue-grey">
+                            <div class="quick-stats__info">
+                                <h6 class="color-white">{{convert_to_digit(number_format(getRefererIncome(getUserId())+getSubCategoryIncome(getUserId())))}}
+                                    <span>تومان</span></h6>
+                                <small style="font-size: 12px"> سهم شما از درآمد زیر مجموعه ها</small>
+                            </div>
 
-                        <div class="quick-stats__info">
-                            <h6 class="color-white">{{convert_to_digit(number_format(getRefererIncome(getUserId())+getSubCategoryIncome(getUserId())))}} <span>تومان</span></h6>
-                            <small style="font-size: 12px"> سهم شما از درآمد زیر مجموعه ها</small>
                         </div>
-
                     </div>
+
+
                 </div>
 
 
-            </div>
-
-
+            @endif
 
         @endif
         @yield('content')
@@ -587,7 +608,7 @@ $path = url('template/material');
 
 </main>
 <script>
-    function copyToClipboard(elementId, type = 'select',title="کپی شد") {
+    function copyToClipboard(elementId, type = 'select', title = "کپی شد") {
 
 
         var aux = document.createElement("input");
@@ -659,6 +680,6 @@ $path = url('template/material');
 <script src="{{$path}}/js/app.min.js"></script>
 
 <script src="{{$path}}/vendors/bower_components/select2/dist/js/select2.full.min.js"></script>
- @include('flash_message')
- </body>
+@include('flash_message')
+</body>
 </html>

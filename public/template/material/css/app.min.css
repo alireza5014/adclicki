@@ -10929,11 +10929,11 @@ button, input, optgroup, select, textarea {
 }
 
   .listview__content > p {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: #8a8a8a;
-    margin-bottom: 0
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
+    /*white-space: nowrap;*/
+    /*color: #8a8a8a;*/
+    /*margin-bottom: 0*/
   }
 
 .listview__heading {

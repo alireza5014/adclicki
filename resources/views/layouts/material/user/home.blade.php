@@ -9,7 +9,7 @@
 
 
     <div class='m-r-15 m-l-15 card-box alert alert-danger'>
-        <p class="text-white"> با سلام. کاربر پرداخت کننده سایت ادکلیکی تغییر یافت .از این پس پرداخت ها به موقع انجام خواهد شد. </p>
+        <p class="text-white"> امکان تغییر زیر مجموعه توسط کاربر فعال شد. با خرید زیر مجموعه می توانید درآمد زیادی کسب کنید. زیر مجموعه ها در آینده نزدیک افزایش قیمت خواهند داشت. یرای خرید <a href="{{route('user.subcategory.new')}}">اینجا</a> کلیک کنید  </p>
     </div>
 <div class="user__info card">
     <div class="row group  ">

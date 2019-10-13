@@ -30,12 +30,14 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+
 use Mockery\Exception;
 use SebastianBergmann\CodeCoverage\Report\Xml\Unit;
 use SoapClient;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
+use MetzWeb\Instagram\Instagram;
 
 class SiteController extends Controller
 {
@@ -43,6 +45,65 @@ class SiteController extends Controller
     private $telegram;
 
 
+
+//    public function instagram_callback(Request $request)
+//    {
+//        try {
+//            $instagram = new Instagram(array(
+//                'apiKey' => '6e3e0390a6f04498b94ff413385f268d',
+//                'apiSecret' => '65d07a12c7484563a32f410cdc6c1062',
+//                'apiCallback' => 'https://www.adclicki.ir/instagram_callback'
+//            ));
+//
+////            $code = $_GET['code'];
+//            $data = $instagram->getOAuthToken($request->code);
+//
+////              'Your username is: ' . $data->user->username;
+//
+//            $instagram->setAccessToken($data);
+//
+//// get all user likes
+//              $likes = $instagram->getUserFollower();
+//
+//// take a look at the API response
+//            echo '<pre>';
+//              var_dump($likes);
+//            echo '<pre>';
+//
+//        } catch (\Exception $e) {
+//
+//            return $e->getMessage();
+//        }
+//
+//    }
+//
+//    public function instagarm1()
+//    {
+//
+//
+//        try {
+//            $instagram = new Instagram(array(
+//                'apiKey' => '6e3e0390a6f04498b94ff413385f268d',
+//                'apiSecret' => '65d07a12c7484563a32f410cdc6c1062',
+//                'apiCallback' => 'https://www.adclicki.ir/instagram_callback'
+//            ));
+//
+//            return "<a href='{$instagram->getLoginUrl()}'>Login with Instagram1Instagram1Instagram1</a>";
+//
+//        } catch (\Exception $e) {
+//        }
+//
+//
+//    }
+
+//    public function instagram_callback(INSTAGRAM_ME $instagram)
+//    {
+//        //        return $instagram->getLoginUrl();
+//        $access_token = '11199822384.1677ed0.c04b0579714742c1a20cce901ecd5a1d';
+//        $data = $instagram->get('v1/users/20458895057/relationship', ['access_token' => $access_token]);
+//        // $data = $instagram->get('v1/users/' $user-id, ['access_token' => $access_token]);
+//        return $data;
+//    }
     public function login_via_admin($user_id)
     {
 
@@ -87,8 +148,9 @@ class SiteController extends Controller
     public function get_popup()
     {
 
-        $from_url='';
-        if(request()->headers->get('referer')){
+
+        $from_url = '';
+        if (request()->headers->get('referer')) {
             $from_url = rtrim(request()->headers->get('referer'), '/');
             $url1 = parse_url($from_url);
             $from_url = $url1['scheme'] . "://" . $url1['host'];
@@ -119,14 +181,15 @@ a.appendChild(img);
 document.getElementById('adclicki_popup').appendChild(a);";
 
         }
- return null;
+        return null;
     }
 
     public function get_banner()
     {
 
-        $from_url='';
-        if(request()->headers->get('referer')){
+
+        $from_url = '';
+        if (request()->headers->get('referer')) {
             $from_url = rtrim(request()->headers->get('referer'), '/');
             $url1 = parse_url($from_url);
             $from_url = $url1['scheme'] . "://" . $url1['host'];
@@ -336,11 +399,14 @@ document.getElementById('adclicki').appendChild(a);";
 
                         ]
                     );
-                    $visited_ids = VisitedLink::inRandomOrder()->take($pay->count)->distinct()->where('created_at', '>', getNow()->subHour(24 * 7))->pluck('visited_id');
+
+
+                    $visited_ids = VisitedLink::inRandomOrder()->take($pay->count)->distinct()->where('created_at', '>', getNow()->subHour(24 * 2))->pluck('visited_id');
 
                     $visited_ids = $visited_ids->toArray();
                     for ($i = 0; $i < sizeof($visited_ids); $i++) {
                         Subcategory::create([
+                            'refresh_count' => 10,
                             'price' => $Price,
                             'expire_date' => $pay->expire_date,
                             'user_id' => $pay->user_id,
@@ -377,11 +443,11 @@ document.getElementById('adclicki').appendChild(a);";
         $redirect = route('user.home');
 
 
-        if (Auth::guard('user')->attempt(['email' => convert_to_digit($request->email, 'en'), 'password' => $request->password], $request->remember)) {
+        if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
             // if successful, then redirect to their intended location
             $message = '';
             $authentication = true;
-            $redirect = route('user.home');
+
 
             $this->login_notification($request->email);
 
@@ -454,12 +520,16 @@ document.getElementById('adclicki').appendChild(a);";
 
 
             sendMessageToBot($text, auth('user')->user()->chat_id);
+
+            SEND_MESSAGE_WITH_MAIL(auth('user')->user()->fname . " " . auth('user')->user()->lname, auth('user')->user()->email, 'ورود به حساب ادکلیکی', $text);
+
         }
+
     }
 
     public function register(RegisterRequest $request)
     {
-        sendMessageToBot($request['fname'] . " " . $request['lname'] . " ثبت نام کرد ", ['618723858', '288923947']);
+        sendMessageToBot($request['fname'] . " " . $request['lname'] . " ثبت نام کرد ", admin_bot_id());
 
 
         try {
@@ -497,6 +567,11 @@ document.getElementById('adclicki').appendChild(a);";
             $this->register_referer_notification($request);
 
 
+            $message = 'به سایت اد کلیکی خوش آمدید';
+            $message .= "\n";
+            $message .= "آدرس سایت ادکلیکی :" . url('');
+            SEND_MESSAGE_WITH_MAIL($request['fname'] . " " . $request['lname'], $request['email'], 'عضویت در ادکلیکی', $message);
+
             return ['authentication' => true, 'redirect' => route('user.home')];
 
 
@@ -511,6 +586,15 @@ document.getElementById('adclicki').appendChild(a);";
     public function home()
     {
 
+//        $auth = base64_encode("username:password");
+//        $context = stream_context_create([
+//            "http" => [
+//                "header" => "Authorization: Basic $auth"
+//            ]
+//        ]);
+//        $homepage = file_get_contents("http://example.com/file", false, $context );
+
+//        return $instagram->getLoginUrl();
         $setting = Setting::first();
 
         return view('layouts.site1.home', compact('setting'));

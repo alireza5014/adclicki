@@ -15,6 +15,7 @@ class VerifyCsrfToken extends Middleware
         'telegram/*',
         'user/verify',
         'user/verify_3',
+        'instagarm'
 
 //        '/<token>/webhook'
     ];

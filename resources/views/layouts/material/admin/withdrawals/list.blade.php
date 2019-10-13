@@ -47,6 +47,7 @@
 
                             <div class="col-md-6">
                                 <input
+
                                         checked
                                         name="telegram"
                                         id="telegram"

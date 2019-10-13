@@ -83,7 +83,7 @@ class WebsiteController extends Controller
             sendMessageToBot($text, $uchat_id);
         }
 
-        sendMessageToBot($text, ['618723858','288923947']);
+        sendMessageToBot($text, admin_bot_id());
 
 
         return redirect(route('user.website.list'))->with('success', 'سایت  شما با موفقیت ثبت شد.');
@@ -122,7 +122,7 @@ class WebsiteController extends Controller
             sendMessageToBot($text, $uchat_id);
         }
 
-        sendMessageToBot($text, ['618723858','288923947']);
+        sendMessageToBot($text,admin_bot_id());
 
 
         return redirect(route('user.website.list'))->with('success', 'سایت  شما با موفقیت ویرایش شد.');
@@ -150,7 +150,7 @@ class WebsiteController extends Controller
             sendMessageToBot($text, $uchat_id);
         }
 
-        sendMessageToBot($text, ['618723858','288923947']);
+        sendMessageToBot($text, admin_bot_id());
 
         return back()->with('success', 'سایت  شما با موفقیت حدف شد.');
     }

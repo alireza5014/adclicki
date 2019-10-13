@@ -9,9 +9,40 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Mockery\Exception;
+
 
 class SubCategoryController extends Controller
 {
+
+    public function refresh($id)
+    {
+        try{
+            $sub= Subcategory::where('id',$id)->select('refresh_count')->first();
+            if($sub['refresh_count']>0) {
+
+                $visited_ids = VisitedLink::inRandomOrder()->take(1)->distinct()->where('created_at', '>', getNow()->subHour(24 * 1))->pluck('visited_id');
+                Subcategory::where('id', $id)->where('user_id', getUserId())->update([
+
+                    'referrer_id' => $visited_ids[0],
+                    'refresh_count' => DB::raw('refresh_count -1'),
+
+                ]);
+            }
+            else{
+                return back()->with('error','شما ریفرش های خود را انجام داده اید.');
+
+            }
+        }
+        catch (Exception $e){
+            return back()->with('error','خطا');
+
+        }
+
+        return back()->with('success','تغییر زیر مجموعه با موفقیت انجام شد');
+    }
+
+
     public function list(Request $request)
     {
 

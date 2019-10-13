@@ -42,7 +42,7 @@ class AdsController extends Controller
     {
 
         $text = getUserId() . "\n" . $request->title . "\n" . "یک آگهی جستجو گوگل ویرایش کرد";
-        sendMessageToBot($text, ['618723858','288923947']);
+        sendMessageToBot($text, admin_bot_id());
 
         ($request->link == $request->old_link) ? $status = [] : $status = $status = ['status' => -1];
 
@@ -75,7 +75,7 @@ class AdsController extends Controller
     {
 
         $text = getUserId() . "\n" . $request->title . "\n" . "یک آگهی کلیکی ویرایش کرد";
-        sendMessageToBot($text, ['618723858','288923947']);
+        sendMessageToBot($text, admin_bot_id());
         ($request->link == $request->old_link) ? $status = [] : $status = $status = ['status' => -1];
 
         $store_path = '/images/' . getUserId() . '/ads/';
@@ -373,7 +373,7 @@ class AdsController extends Controller
     public function clicki_save(AdsRequest $request)
     {
         $text = getUserId() . "\n" . $request->title . "\n" . "یک آگهی کلیکی ثبت کرد";
-        sendMessageToBot($text, ['618723858','288923947']);
+        sendMessageToBot($text, admin_bot_id());
         $store_path = '/images/' . getUserId() . '/ads/';
 
         $image = UpLoad::create('image')
@@ -406,7 +406,7 @@ class AdsController extends Controller
     {
 
         $text = getUserId() . "\n" . $request->title . "\n" . "یک آگهی جستجو گوگل ثبت کرد";
-        sendMessageToBot($text, ['618723858','288923947']);
+        sendMessageToBot($text, admin_bot_id());
         $ads = Ads::create(
             [
                 'user_id' => getUserId(),

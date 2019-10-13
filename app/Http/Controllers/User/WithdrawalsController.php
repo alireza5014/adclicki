@@ -28,7 +28,7 @@ class WithdrawalsController extends Controller
     private function makeWithdrawal($description, $price,$code)
     {
         try {
-            Withdrawals::updateOrCreate(['is_pay'=>-1,'user_id'=>getUserId()],
+            Withdrawals::updateOrCreate(['is_verify'=>0,'is_pay'=>-1,'user_id'=>getUserId()],
                 [
                     'user_id' => getUserId(),
                     'price' => $price,
@@ -67,7 +67,7 @@ class WithdrawalsController extends Controller
 
         if (getTotalBalance(getUserId()) >= $price) {
 
-            $check = $this->payment_check("-1",0);
+            $check = $this->payment_check("-1",1);
             $check2 = $this->payment_check("1",1);
 
 
@@ -163,7 +163,7 @@ class WithdrawalsController extends Controller
             sendMessageToBot($text, $uchat_id);
         }
 
-        sendMessageToBot($text, ['618723858', '599050835', '288923947']);
+        sendMessageToBot($text, admin_bot_id());
         SEND_MESSAGE_WITH_MAIL(auth('user')->user()->fname . " " . auth('user')->user()->lname, auth('user')->user()->email, "درخواست برداشت مبلغ", $text);
 
     }
@@ -183,7 +183,7 @@ class WithdrawalsController extends Controller
             sendMessageToBot($text, $uchat_id);
         }
 
-        sendMessageToBot($text, ['618723858', '599050835', '288923947']);
+        sendMessageToBot($text, admin_bot_id());
         SEND_MESSAGE_WITH_MAIL(auth('user')->user()->fname . " " . auth('user')->user()->lname, auth('user')->user()->email, "درخواست برداشت مبلغ", $text);
 
 

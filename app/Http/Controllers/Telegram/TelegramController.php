@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 
 use App\Model\Ads;
 use App\Model\VisitedLink;
+use App\Ticket;
+use App\TicketAnswer;
 use App\User;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
@@ -36,7 +38,7 @@ class TelegramController extends Controller
     public function __construct()
     {
 //        $this->token = env('TELEGRAM_BOT_TOKEN');
-        $this->token ='640316721:AAE_C1Ge-Pi9npRlQEi5k1IgPj2Jsp16KlM';
+        $this->token = '640316721:AAE_C1Ge-Pi9npRlQEi5k1IgPj2Jsp16KlM';
     }
 
     private function menu()
@@ -70,13 +72,25 @@ class TelegramController extends Controller
 
                 [
                     [
-                        'text' => 'تعداد زیر مجموعه های من', 'callback_data' => 'referrer_count',
+                        'text' => 'تعداد زیر مجموعه های دعوت شده', 'callback_data' => 'referrer_count',
                     ]
                 ]
                 ,
                 [
                     [
-                        'text' => 'درآمد حاصل از زیر مجموعه ها', 'callback_data' => 'referrer_income',
+                        'text' => 'تعداد زیر مجموعه های خریداری  شده', 'callback_data' => 'subcategory_count',
+                    ]
+                ]
+                ,
+                [
+                    [
+                        'text' => 'درآمد حاصل از زیر مجموعه دعوت شده', 'callback_data' => 'referrer_income',
+                    ]
+                ]
+                ,
+                [
+                    [
+                        'text' => 'درآمد حاصل از زیر مجموعه های  خریداری  شده', 'callback_data' => 'subcategory_income',
                     ]
                 ]
                 ,
@@ -176,8 +190,43 @@ class TelegramController extends Controller
                             'hide_keyboard' => true
                         ]);
 
+                        if (in_array($this->chat_id,admin_bot_id())) {
 
-                        $this->msg = "کد فعالسازی صحیح نمی باشد!";
+                            $reply_text = $update->getMessage()->getReplyToMessage()->getText();
+                            $message = $update->getMessage()->getText();
+
+                            $arrText = explode("|", $reply_text);
+                            $ticket_id = $arrText[0];
+//    file_put_contents("test.txt",$arrText[0]);
+                            file_put_contents("test.txt", $update);
+
+
+                            $result = TicketAnswer::create([
+                                'message' => $message,
+                                'ticket_id' => $ticket_id,
+                                'sender_type' => 1,
+                                'ip' => getIP(),
+                                'image_path' => "noimage.png",
+                            ]);
+
+                            Ticket::where('id', $ticket_id)->update(['status' => 1, 'seen' => 1]);
+
+
+                            if($result){
+                                $this->msg = "تیکت با موفقیت پاسخ داده شد. ممنون  عشققمممم ❤️❤️❤️❤️❤️❤️❤️❤️";
+
+                            }
+                            else{
+                                $this->msg = "خطا لطفا دوباره پاسخ بدبد";
+
+                            }
+
+                        } else {
+                            $this->msg = "کد فعالسازی صحیح نمی باشد!";
+
+                        }
+
+
                     }
 
 
@@ -228,8 +277,16 @@ class TelegramController extends Controller
                         case 'referrer_count':
                             $this->referrer_count();
                             break;
+
+                            case 'subcategory_count':
+                            $this->subcategory_count();
+                            break;
                         case 'referrer_income':
                             $this->referrer_income();
+                            break;
+
+                            case 'subcategory_income':
+                            $this->subcategory_income();
                             break;
                         case 'get_referrer':
                             $this->get_referrer($telegram);
@@ -298,7 +355,14 @@ class TelegramController extends Controller
 
     private function referrer_count()
     {
-        $this->msg = "تعداد زیر مجموعه های شما " . getReferercount($this->user_id) . " عدد می باشد .";
+        $this->msg = "تعداد زیر مجموعه های دعوت شده شما " . getReferercount($this->user_id) . " عدد می باشد .";
+
+
+    }
+
+    private function subcategory_count()
+    {
+        $this->msg = "تعداد زیر مجموعه های  خریداری شده شما " . getSubcategoryCount($this->user_id) . " عدد می باشد .";
 
 
     }
@@ -306,8 +370,17 @@ class TelegramController extends Controller
     private function referrer_income()
     {
 
-        $value=getRefererIncome($this->user_id)+getSubCategoryIncome($this->user_id);
-        $this->msg = "درآمد حاصل از زیر مجموعه های شما " . $value . " تومان می باشد.";
+        $value = getRefererIncome($this->user_id) ;
+        $this->msg = "درآمد حاصل از زیر مجموعه های دعوت شده شما " . $value . " تومان می باشد.";
+
+
+    }
+
+    private function subcategory_income()
+    {
+
+        $value =  getSubCategoryIncome($this->user_id);
+        $this->msg = "درآمد حاصل از زیر مجموعه های  خریداری شده شما " . $value . " تومان می باشد.";
 
 
     }
@@ -356,6 +429,8 @@ class TelegramController extends Controller
                         'reply_markup' => $this->reply_markup
                     ]);
                 break;
+
+
 
         }
     }

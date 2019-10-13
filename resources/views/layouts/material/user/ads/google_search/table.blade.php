@@ -49,6 +49,16 @@
 
                                     کلمه کلیدی : {{$ad->google_search->keyword}}  <br/>
                                     شماره صفحه : {{$ad->google_search->page_number}}  <br/>
+
+
+                                    <a> رنک الکسا (ایران) :<span
+                                                class="text-danger">{{getAlexaRank($ad->link)['iran']}}</span> ‌</a>
+                                    <br/>
+                                    <a> رنک الکسا (جهان) :<span
+                                                class="text-black-50">{{getAlexaRank($ad->link)['global']}}</span> ‌</a>
+                                    <br/>
+                                    <a target="_blank" class="btn btn-sm btn-primary"
+                                       href="https://www.alexa.com/siteinfo/{{$ad->link}}"> مشاهده رنک در سایت الگسا</a>
                                 @endif
 
                             </td>
