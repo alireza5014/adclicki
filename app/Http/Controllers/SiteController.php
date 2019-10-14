@@ -586,6 +586,7 @@ document.getElementById('adclicki').appendChild(a);";
     public function home()
     {
 
+//return getSiteScreenShot('https://www.adclicki.ir/');
 //        $auth = base64_encode("username:password");
 //        $context = stream_context_create([
 //            "http" => [

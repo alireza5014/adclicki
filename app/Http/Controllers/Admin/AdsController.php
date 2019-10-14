@@ -118,7 +118,7 @@ class AdsController extends Controller
     {
 
         try {
-            $ads = Ads::with('user')->select('user_id','status')->find($id);
+            $ads = Ads::with('user')->select('user_id','status','link')->find($id);
             if($ads->status==-1){
                 $text="آگهی شما باموفقیت تایید شد";
                 $text.="\n";
@@ -132,8 +132,8 @@ class AdsController extends Controller
                 SEND_MESSAGE_WITH_MAIL($ads->user->fname . " " . $ads->user->lname, $ads->user->email, $subject, $text);
 
             }
-
-            Ads::where('id', $id)->update(['status' => -$ads->status]);
+             Ads::where('id', $id)->update(['status' => -$ads->status]);
+            getSiteScreenShot($ads->link);
 
 
             return response()->json(

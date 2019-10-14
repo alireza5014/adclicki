@@ -33,7 +33,7 @@
                     <tbody>
 
                     @foreach($ads as $ad)
-                        <tr>
+                         <tr>
                             <td>{{$ad->id}}</td>
 
                             <td><img src="{{url($ad->image_path)}}"

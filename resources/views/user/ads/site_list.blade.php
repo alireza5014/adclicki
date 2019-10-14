@@ -42,7 +42,8 @@
                     <?php $x = 0?>
                     @foreach($site_ads as $site_ad)
                         @if($site_ad!=null)
-                            <a class="col-md-4" id="ads_{{$site_ad->id}}"
+
+                                <a class="col-md-4" id="ads_{{$site_ad->id}}"
                                onclick="visit_ads({{$site_ad->view_request->id}})">
                                 <div class="card-box">
                                     <span class="label label-info pull-right"><?php echo ++$x ?></span>

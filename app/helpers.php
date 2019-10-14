@@ -1,6 +1,7 @@
 <?php
 
 
+use App\classes\UpLoad;
 use App\Model\Ads;
 use App\Model\Payment;
 use App\Model\Subcategory;
@@ -14,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redis;
 
@@ -21,21 +23,62 @@ use Intervention\Image\ImageManagerStatic as Image;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
+function getSiteScreenShot($url)
+{
+
+    $url = rtrim($url, "/ ");
+//call Google PageSpeed Insights API
+    $path = public_path() . '/images/website/';
+    $image_name = str_replace(array('http://', 'https://'), array('', ''), $url) . '.png';
+
+    if (!file_exists($path . $image_name)) {
+
+
+        try {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url=$url&screenshot=true");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            $data = curl_exec($ch);
+            curl_close($ch);
+
+//decode json data
+            $googlePagespeedData = json_decode($data, true);
+            if (isset($googlePagespeedData['screenshot']['data'])) {
+//screenshot data
+                $screenshot = $googlePagespeedData['screenshot']['data'];
+                $screenshot = str_replace(array('_', '-'), array('/', '+'), $screenshot);
+
+
+                if (!File::exists($path)) {
+                    File::makeDirectory($path, $mode = 0777, true, true);
+                }
+                File::put($path . $image_name, base64_decode($screenshot));
+            }
+
+
+        } catch (Exception $e) {
+            file_put_contents("error1.txt", $e->getMessage());
+        }
+    }
+
+////display screenshot image
+//    echo "<img src=\"data:image/jpeg;base64,".$screenshot."\" />";
+//
+//    exit();
+}
+
 function getAlexaRank($url)
 {
 
 
-
-
-
     $ranks = Cache::remember($url, 60 * 60 * 24, function () use ($url) {
 
-        try{
+        try {
             $string = file_get_contents("https://www.alexa.com/siteinfo/" . $url);
 
-        }
-        catch (Exception $e){
-            $string='';
+        } catch (Exception $e) {
+            $string = '';
         }
         $global = substr($string, strpos($string, 'rankmini-rank'), 100);
         $iran = substr($string, strpos($string, '🇮🇷 Iran'), 100);
@@ -50,9 +93,12 @@ function getAlexaRank($url)
     return $ranks;
 
 }
-function admin_bot_id(){
- return   ['618723858', '599050835', '288923947'];
+
+function admin_bot_id()
+{
+    return ['618723858', '599050835', '288923947'];
 }
+
 function website_status($status)
 {
     switch ($status) {
@@ -110,10 +156,12 @@ function sendMessageToBot($text, $chat_id)
 
 }
 
- function getHirePrice(){
-return 700;
-     return getTodayUnClickedLinkCount(0)*30+getTodayUnClickedLinkCount(1)*2*30;
- }
+function getHirePrice()
+{
+    return 700;
+    return getTodayUnClickedLinkCount(0) * 30 + getTodayUnClickedLinkCount(1) * 2 * 30;
+}
+
 function getTodayUnClickedLinkCount($type = 0)
 {
     $visited_link = VisitedLink::where('created_at', '>', getNow()->subHour(2))
@@ -141,7 +189,7 @@ function getTodayUnClickedLink($user_id, $type = 0)
         ->pluck('view_request_id');
 
     $ads_count = Ads::whereHas('view_request', function ($q) use ($visited_link) {
-          $q->where('status', 1)
+        $q->where('status', 1)
             ->where('count', '>', 0)
             ->whereNotIn('id', $visited_link);
     })
@@ -198,7 +246,7 @@ function getSetting($field = 'all')
 function getTotalBalance($user_id)
 {
 
-    return Payment::where('user_id', $user_id)->sum('price') + getTotalIncome($user_id) + getRefererIncome($user_id)+getTotalWebsite('all',$user_id)+getSubCategoryIncome($user_id);
+    return Payment::where('user_id', $user_id)->sum('price') + getTotalIncome($user_id) + getRefererIncome($user_id) + getTotalWebsite('all', $user_id) + getSubCategoryIncome($user_id);
 
 }
 
@@ -209,15 +257,15 @@ function getTodayIncome($user_id)
 }
 
 
-function getTotalIncome($user_id,$date='total')
+function getTotalIncome($user_id, $date = 'total')
 {
 
-    $res= VisitedLink::where('visited_id', $user_id);
+    $res = VisitedLink::where('visited_id', $user_id);
 
-    if($date!='total'){
-        $res->where('created_at','>',getToday());
+    if ($date != 'total') {
+        $res->where('created_at', '>', getToday());
     }
-   return $res->sum('price');
+    return $res->sum('price');
 
 }
 
@@ -249,23 +297,22 @@ function getRefererIncome($user_id)
     return VisitedLink::whereIn('visited_id', $referer)->sum('referer_price');
 
 }
+
 function getSubCategoryIncome($user_id)
 {
 
-    $income=0;
-    $referers =  Subcategory::where('user_id', $user_id)->get(['referrer_id','expire_date','created_at']);
+    $income = 0;
+    $referers = Subcategory::where('user_id', $user_id)->get(['referrer_id', 'expire_date', 'created_at']);
 
-    for ($i=0;$i<sizeof($referers);$i++)
-    {
-        $income+=VisitedLink::where('visited_id', $referers[$i]['referrer_id'])
-            ->where('created_at','>=',$referers[$i]['created_at'])
-            ->where('created_at','<=',$referers[$i]['expire_date'])
+    for ($i = 0; $i < sizeof($referers); $i++) {
+        $income += VisitedLink::where('visited_id', $referers[$i]['referrer_id'])
+            ->where('created_at', '>=', $referers[$i]['created_at'])
+            ->where('created_at', '<=', $referers[$i]['expire_date'])
             ->sum('referer_price');
     }
     return $income;
 
 }
-
 
 
 function getTotalClick()
@@ -274,19 +321,19 @@ function getTotalClick()
 
 }
 
-function getTotalWebsite($type = 'all',$user_id=0)
+function getTotalWebsite($type = 'all', $user_id = 0)
 {
-    if($user_id==0){
-        $user_id=getUserId();
+    if ($user_id == 0) {
+        $user_id = getUserId();
     }
 
-      $res= VisitedWebsite::whereHas('website',function ($q) use ($user_id){
-         $q->where('user_id', $user_id);
-     });
-         if($type!='all'){
-             $res->where('type', $type);
+    $res = VisitedWebsite::whereHas('website', function ($q) use ($user_id) {
+        $q->where('user_id', $user_id);
+    });
+    if ($type != 'all') {
+        $res->where('type', $type);
 
-         }
+    }
 
     return $res->sum('price');
 
@@ -306,7 +353,7 @@ function getTotalDaryafti()
 
 }
 
-function getUserIdAfterChecking($guard='user')
+function getUserIdAfterChecking($guard = 'user')
 {
     if (auth($guard)->check())
         return auth($guard)->user()->id;
@@ -842,11 +889,12 @@ function flash($title = null, $message = null)
     return $flash->info($title, $message);
 }
 
-function SEND_RECOVERY_MAIL($to_name,$to_email,$recovery_link){
+function SEND_RECOVERY_MAIL($to_name, $to_email, $recovery_link)
+{
 
     $data = array(
         "link" => $recovery_link,
-        "name" =>$to_name,
+        "name" => $to_name,
     );
 
     Mail::send('mails.recover_password', $data, function ($message) use ($to_name, $to_email) {
@@ -856,24 +904,25 @@ function SEND_RECOVERY_MAIL($to_name,$to_email,$recovery_link){
     });
 }
 
-function SEND_MESSAGE_WITH_MAIL($to_name,$to_email,$title,$description){
+function SEND_MESSAGE_WITH_MAIL($to_name, $to_email, $title, $description)
+{
 
     $data = array(
         "name" => $to_name,
         "title" => $title,
-        "description" =>$description,
+        "description" => $description,
     );
 
-  try{  Mail::send('mails.message', $data, function ($message) use ($to_name, $to_email,$title) {
-      $message->to($to_email, $to_name)
-          ->subject($title);
-      $message->from('adclicki.ir@gmail.com', '[ADCLICKI.IR]');
-  });
-  }
-  catch (Exception $e){
-      file_put_contents("error.txt",$e->getMessage());
+    try {
+        Mail::send('mails.message', $data, function ($message) use ($to_name, $to_email, $title) {
+            $message->to($to_email, $to_name)
+                ->subject($title);
+            $message->from('adclicki.ir@gmail.com', '[ADCLICKI.IR]');
+        });
+    } catch (Exception $e) {
+        file_put_contents("error.txt", $e->getMessage());
 
-  }
+    }
 }
 
 

@@ -15,16 +15,7 @@
 
             <div class="card-block">
 
-                <h2 class="text-center">به درخواست کاربران محترم ادکلیکی بزودی انجمن راه اندازی خواهد شد</h2>
-                <p class="text-danger text-center">
 
-                در صورت موافق یا مخالف بودن راه اندازی انجمن نظر خود را از طریق تیکت اعلام بفرمایید
-
-                <span>
-                <a href="{{route('user.tickets')}}"
-                class="btn btn-sm btn-success">ثبت تیکت جدید</a>
-                </span>
-                </p>
 
 
                 <div class="row">

@@ -10,6 +10,7 @@
                     <tr>
 
                         <th>#</th>
+
                         <th>تصویر</th>
 
 
@@ -35,9 +36,14 @@
                         <tr>
                             <td>{{$ad->id}}</td>
 
-                            <td><img src="{{url($ad->image_path)}}"
-                                     class="img-responsive"
-                                     width="140px" height="30px"/>
+                            <td>
+                                <img class="animated"
+                                     src="{{url('/images/website/'.str_replace(array('http://', 'https://'), array('', ''), rtrim($ad->link, "/ ")).".png")}}"
+                                     width="200px" alt="">
+
+                                <img  src="{{url($ad->image_path)}}"
+                                     class="img-responsive mt-1"
+                                     width="100%" height="30px"/>
                                 <br/>
                                 {{$ad->title}}
 

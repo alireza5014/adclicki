@@ -1,1 +1,2 @@
-Connection could not be established with host smtp.googlemail.com [php_network_getaddresses: getaddrinfo failed: nodename nor servname provided, or not known #0]
+Expected response code 354 but got code "550", with message "550 5.4.5 Daily user sending quota exceeded. o15sm16345350pjs.14 - gsmtp
+"

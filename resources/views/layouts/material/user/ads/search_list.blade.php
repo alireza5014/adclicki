@@ -33,7 +33,7 @@
                         @foreach($search_ads as $google_search_ad)
                             @if($google_search_ad!=null)
 
-                                <div class="col-md-6">
+                                <div class="col-md-3">
 
                                     <a class="col-md-12" id="ads_{{$google_search_ad->id}}"
                                        style="">
@@ -41,9 +41,11 @@
                                         <div class="card">
                                             <div class="col-md-12">
                                                 <p>{{$google_search_ad->title}}</p>
+                                                <img class="animated img-responsive" src="{{url('/images/website/'.str_replace(array('http://', 'https://'), array('', ''), rtrim($google_search_ad->link, "/ ")).".png")}}" width="100%"  alt="">
+
                                                 <a
                                                         onclick="search_ads(<?php echo $google_search_ad->id?>,'{{$google_search_ad->google_search->keyword}}')"
-                                                        class="btn btn-success " style="width: 100%">بازدید</a>
+                                                        class="btn btn-success text-white " style="width: 100%"> بازدید و کسب درآمد</a>
                                             </div>
 
                                             <div class="col-md-12">

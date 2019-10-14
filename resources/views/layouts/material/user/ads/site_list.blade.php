@@ -43,6 +43,8 @@
                                         </div>
 
                                         <div class="card-block">
+                                            <img class="animated" src="{{url('/images/website/'.str_replace(array('http://', 'https://'), array('', ''), rtrim($site_ad->link, "/ ")).".png")}}" width="100%" alt="">
+
                                             <img class="animated" src="{{url($site_ad->image_path)}}" width="100%" alt="">
 
                                             <div class="row">

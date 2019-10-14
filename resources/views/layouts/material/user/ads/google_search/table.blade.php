@@ -10,6 +10,8 @@
                     <tr>
 
                         <th>#</th>
+                        <th>#</th>
+
 
 
                         <th>عنوان</th>
@@ -34,8 +36,12 @@
 
                     @foreach($ads as $ad)
                         <tr>
-                            <td>{{$ad->id}}</td>
 
+                            <td>{{$ad->id}}</td>
+<td>
+    <img class="animated" src="{{url('/images/website/'.str_replace(array('http://', 'https://'), array('', ''), rtrim($ad->link, "/ ")).".png")}}" width="200px" alt="">
+
+</td>
 
                             <td>
                                 <p>  {{$ad->title}}  </p>
