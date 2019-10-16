@@ -1,0 +1,1 @@
+   Wrapper  for  s'PHP  GD  Library  for  easy  image  manipulation  to  ,eziser  crop  and  draw  images  on  top  of  each  other  preserving  ,ycnerapsnart  . 

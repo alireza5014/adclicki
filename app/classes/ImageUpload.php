@@ -39,8 +39,30 @@ class ImageUpload
     public static function makeImageWithText2($text, $file_name){
 
 
+        if (!preg_match('/[^A-Za-z0-9]/', $text[0])) // '/[^a-z\d]/i' should also work.
+        {
 
-                $text= fagd($text, 'fa') ;
+           $rtl=false;
+           $aline='left';
+            // string contains only english letters & digits
+        }
+        else{
+            $rtl=true;
+            $aline='right';
+        }
+
+
+        $text_temp = explode(" " , $text);
+        $text1 = "";
+
+        for ($i = 0; $i<sizeof($text_temp); $i++) {
+
+                 $text1.= fagd($text_temp[$i], 'fa') . " ";
+
+        }
+
+
+        $text = $text1;
 
         $image = new PHPImage(650, 700);
 
@@ -55,32 +77,23 @@ class ImageUpload
         $image->rectangle(0, 0, 600, 100, array(255, 222, 0), 0.5);
         $image->setFont('fonts/IRANSansWeb.ttf');
 
-        $image->setAlignHorizontal('right');
+        $image->setAlignHorizontal($aline);
         $image->setTextColor(array(0, 0, 0));
 
         $image->setStrokeWidth(.1);
         $image->setStrokeColor(array(255, 0, 0));
-//        $image->textBox('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam molestie tortor quam, at congue nibh imperdiet dapibus.', array(
 
-//        $image->text('Hello World!', array('fontSize' => 12, 'x' => 50, 'y' => 50));
-//        $image->text('This is a big sentence', array(
-//            'fontSize' => 60, // Desired starting font size
-//            'x' => 100,
-//            'y' => 100,
-//            'width' => 200,
-//            'height' => 50,
-//            'alignHorizontal' => 'center',
-//            'alignVertical' => 'center',
-//            'debug' => true
-//        ));
         $image->textBox($text, array(
             'width' => 500,
             'height' => 400,
             'fontSize' => 22, // Desired starting font size
             'x' => 50,
-            'y' => 200
+            'y' => 200,
+            'rtl' => $rtl,
+
         ));
         $image->save(public_path($file_name));
+//        $image->show();
 
     }
     public static function makeImageWithText($text, $file_name)
@@ -99,6 +112,8 @@ class ImageUpload
 
         }
         $text = $text1;
+
+
         $rand_color = '#' . substr(md5(mt_rand()), 0, 6);
 
         $img = Image::canvas(500, 500, $rand_color);

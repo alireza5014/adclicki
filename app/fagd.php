@@ -88,15 +88,20 @@ function fagd($str, $z = "", $method = 'normal')
         $p_chars = array_merge($p_chars, $normal);
     }
 
-     $explod = explode(' ', $str);
+//     $explod = explode(' ', $str);
 
+     $output = '';
 
-    $output = '';
+//    for ($j = sizeof($explod) - 1; $j >= 0; $j--) {
+//    for ($j = 0; $j <sizeof($explod); $j++) {
+        if (!preg_match('/[^A-Za-z0-9]/', $str)) // '/[^a-z\d]/i' should also work.
+        {
 
-    for ($j =0;$j< sizeof($explod) ; $j++) {
-
-        $str_len = utf8_strlen($explod[$j]);
-        preg_match_all("/./u", $explod[$j], $array_string);
+            $str=strrev($str);
+            // string contains only english letters & digits
+        }
+        $str_len = utf8_strlen($str);
+        preg_match_all("/./u", $str, $array_string);
         $test = '';
         $output .= " ";
 
@@ -135,7 +140,7 @@ function fagd($str, $z = "", $method = 'normal')
                     }
                 } elseif ($i == 0) {
                     $output .= $p_chars[$current_char][2];
-                    $test .= "0\n";
+
 
                 } else {
                     if(in_array($back_char,$mp_chars)){
@@ -146,7 +151,6 @@ function fagd($str, $z = "", $method = 'normal')
                         $output .= $p_chars[$current_char][1];
 
                     }
-                     $test .= "1\n";
 
                 }
 
@@ -157,7 +161,7 @@ function fagd($str, $z = "", $method = 'normal')
 
 
         }
-    }
+//    }
 
     return $output;
 }

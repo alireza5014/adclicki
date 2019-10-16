@@ -159,7 +159,7 @@ function sendMessageToBot($text, $chat_id)
 
 function getHirePrice()
 {
-    return 700;
+    return 1300;
     return getTodayUnClickedLinkCount(0) * 30 + getTodayUnClickedLinkCount(1) * 2 * 30;
 }
 
