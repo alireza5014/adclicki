@@ -25,9 +25,10 @@ use Telegram\Bot\Exceptions\TelegramSDKException;
 
 function getSiteScreenShot($url)
 {
+    $url = strtok($url, "?");
 
     $url = rtrim($url, "/ ");
-//call Google PageSpeed Insights API
+ //call Google PageSpeed Insights API
     $path = public_path() . '/images/website/';
     $image_name = str_replace(array('http://', 'https://'), array('', ''), $url) . '.png';
 

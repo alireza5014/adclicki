@@ -108,6 +108,7 @@ Route::post('site/insert_message', 'ContactsController@save')->name('insert_mess
 
 
 Route::any('telegram/action', 'Telegram\TelegramController@action')->name('action');
+Route::any('text_to_image/action', 'Telegram\TextToImageController@action')->name('action2');
 
 
 Route::group(['prefix' => '/user'], function () {

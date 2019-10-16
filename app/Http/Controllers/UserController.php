@@ -51,8 +51,7 @@ class UserController extends Controller
         $from_url = $url1['scheme'] . "://" . $url1['host'];
         // type 1= google
         // type 2 = bing
-
-        try {
+         try {
             $ads = Ads::
             where('link', "LIKE", "%$from_url%")
                 ->where('user_id', $user_id)
@@ -67,6 +66,7 @@ class UserController extends Controller
                 }])
                 ->get();
 //            file_put_contents("google_test2.txt",$ads."__");
+             file_put_contents("error_3.txt",$ads."___");
 
             $x = 0;
             for ($i = 0; $i < sizeof($ads); $i++) {

@@ -37,7 +37,10 @@
                             <td>
 
                                 <p>  {{$ad->title}}  </p>
-
+                                <img class="animated"
+                                     src="{{url('/images/website/'.str_replace(array('http://', 'https://'), array('', ''), rtrim($ad->link, "/ ")).".png")}}"
+                                     width="200px" alt="">
+                                <br/>
                                 {{$ad->user->fname." ".$ad->user->lname}}
                                 <br>
                                 {{$ad->user->email}}

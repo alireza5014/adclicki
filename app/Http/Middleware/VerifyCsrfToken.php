@@ -13,6 +13,7 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         'telegram/*',
+        'text_to_image/*',
         'user/verify',
         'user/verify_3',
         'instagarm'

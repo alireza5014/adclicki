@@ -2,7 +2,7 @@
 @section('header')
     @parent
 
-    <title> لیست   </title>
+    <title> لیست </title>
 
 @endsection
 @section('content')
@@ -76,7 +76,7 @@
                         <div class="form-group">
 
                             <div class="col-md-12">
-                                <button type="submit" class="btn btn-md btn-primary btn-block" >SEND</button>
+                                <button type="submit" class="btn btn-md btn-primary btn-block">SEND</button>
                             </div>
                         </div>
                     </form>
@@ -91,166 +91,176 @@
 
         <div class="card">
 
-        <div class="card-block">
+            <div class="card-block">
 
-            <div class="row">
-                <div class="col-md-12 mt-4">
+                <div class="row">
+                    <div class="col-md-12 mt-4">
 
-                    <a href="{{route('admin.ads.clicki.list')}}" class="btn btn-primary">همه    </a>
-                    <a href="{{route('admin.ads.clicki.list')."?verify=1"}}"  class="btn btn-success"> تایید شده </a>
-                    <a href="{{route('admin.ads.clicki.list')."?verify=-1"}}"  class="btn btn-danger"> تایید نشده </a>
-                    <a href="{{route('admin.ads.clicki.list')."?publish=1"}}"  class="btn btn-success"> منتشر شده </a>
-                    <a href="{{route('admin.ads.clicki.list')."?publish=-1"}}"  class="btn btn-danger"> منتشر نشده </a>
-                    <a href="{{route('admin.ads.clicki.list')."?publish=1&verify=1"}}"  class="btn btn-success"> تایید شده و منتشر شده </a>
-                    <a href="{{route('admin.ads.clicki.list')."?publish=-1&verify=1"}}"  class="btn btn-warning"> تایید شده و منتشر نشده </a>
-                       <a href="{{route('admin.ads.clicki.list')."?publish=1&verify=-1"}}"  class="btn btn-info"> تایید نشده و منتشر شده </a>
-                    <a href="{{route('admin.ads.clicki.list')."?publish=-1&verify=-1"}}"  class="btn btn-pink"> تایید نشده و منتشر نشده </a>
+                        <a href="{{route('admin.ads.clicki.list')}}" class="btn btn-primary">همه </a>
+                        <a href="{{route('admin.ads.clicki.list')."?verify=1"}}" class="btn btn-success"> تایید شده </a>
+                        <a href="{{route('admin.ads.clicki.list')."?verify=-1"}}" class="btn btn-danger"> تایید
+                            نشده </a>
+                        <a href="{{route('admin.ads.clicki.list')."?publish=1"}}" class="btn btn-success"> منتشر
+                            شده </a>
+                        <a href="{{route('admin.ads.clicki.list')."?publish=-1"}}" class="btn btn-danger"> منتشر
+                            نشده </a>
+                        <a href="{{route('admin.ads.clicki.list')."?publish=1&verify=1"}}" class="btn btn-success">
+                            تایید شده و منتشر شده </a>
+                        <a href="{{route('admin.ads.clicki.list')."?publish=-1&verify=1"}}" class="btn btn-warning">
+                            تایید شده و منتشر نشده </a>
+                        <a href="{{route('admin.ads.clicki.list')."?publish=1&verify=-1"}}" class="btn btn-info"> تایید
+                            نشده و منتشر شده </a>
+                        <a href="{{route('admin.ads.clicki.list')."?publish=-1&verify=-1"}}" class="btn btn-pink"> تایید
+                            نشده و منتشر نشده </a>
+
+
+                    </div>
+                </div>
+
+                <div class="row">
+
+                        @include('layouts.material.admin.ads.clicki.table')
 
 
                 </div>
             </div>
-
-
-                @include('layouts.material.admin.ads.clicki.table')
-
-            </div>
         </div>
     </div>
 
-            <script>
-                $(document).ready(function () {
+    <script>
+        $(document).ready(function () {
 
-                    $(document).on('click', '.pagination a', function (event) {
-                        event.preventDefault();
-                        $('#loader').show();
-                        var page = $(this).attr('href');
-                        fetch_data(page);
-                    });
-
-
-                });
-
-                function fetch_data(page) {
-                    $.ajax({
-                        url: page,
-                        success: function (data) {
-                            $('.card-block').html(data);
-                            $('#loader').hide();
-
-                        }
-                    });
-                }
-
-            </script>
-
-            <script>
-
-                function active(id) {
-
-                    event.preventDefault();
-                    $('#loader' + id).show();
-
-                    $.ajax({
-                        url: 'active/' + id,
-                        success: function (data) {
-                            if (data.status) {
-                                $('#loader' + id).hide();
-
-                                var status;
-                                (data.publish === 1) ? status = [['text-success', 'منتشر شده'], ['text-danger', 'منتشر نشده']] : status = [['text-danger', 'منتشر نشده'], ['text-success', 'منتشر شده']];
-                                $('#active_' + id).children("i").addClass(status[0][0]).removeClass(status[1][0]);
-                                $('#active_' + id).children("p").text(status[0][1])
-
-                            }
+            $(document).on('click', '.pagination a', function (event) {
+                event.preventDefault();
+                $('#loader').show();
+                var page = $(this).attr('href');
+                fetch_data(page);
+            });
 
 
-                        }
-                    });
+        });
+
+        function fetch_data(page) {
+            $.ajax({
+                url: page,
+                success: function (data) {
+                    $('.card-block').html(data);
+                    $('#loader').hide();
 
                 }
+            });
+        }
 
-                function confirm(id) {
+    </script>
 
-                    event.preventDefault();
-                    $('#loader' + id).show();
+    <script>
 
-                    $.ajax({
-                        url: 'confirm/' + id,
-                        success: function (data) {
-                            if (data.status) {
-                                $('#loader' + id).hide();
+        function active(id) {
 
-                                var status;
-                                (data.publish === 1) ? status = [['text-success', 'تایید شده'], ['text-danger', ' منتظر تایید کارشناس']] : status = [['text-danger', ' منتظر تایید کارشناس'], ['text-success', 'تایید شده']];
-                                $('#confirm_' + id).children("i").addClass(status[0][0]).removeClass(status[1][0]);
-                                $('#confirm_' + id).children("p").text(status[0][1])
+            event.preventDefault();
+            $('#loader' + id).show();
 
-                            }
+            $.ajax({
+                url: 'active/' + id,
+                success: function (data) {
+                    if (data.status) {
+                        $('#loader' + id).hide();
 
+                        var status;
+                        (data.publish === 1) ? status = [['text-success', 'منتشر شده'], ['text-danger', 'منتشر نشده']] : status = [['text-danger', 'منتشر نشده'], ['text-success', 'منتشر شده']];
+                        $('#active_' + id).children("i").addClass(status[0][0]).removeClass(status[1][0]);
+                        $('#active_' + id).children("p").text(status[0][1])
 
-                        }
-                    });
+                    }
+
 
                 }
+            });
+
+        }
+
+        function confirm(id) {
+
+            event.preventDefault();
+            $('#loader' + id).show();
+
+            $.ajax({
+                url: 'confirm/' + id,
+                success: function (data) {
+                    if (data.status) {
+                        $('#loader' + id).hide();
+
+                        var status;
+                        (data.publish === 1) ? status = [['text-success', 'تایید شده'], ['text-danger', ' منتظر تایید کارشناس']] : status = [['text-danger', ' منتظر تایید کارشناس'], ['text-success', 'تایید شده']];
+                        $('#confirm_' + id).children("i").addClass(status[0][0]).removeClass(status[1][0]);
+                        $('#confirm_' + id).children("p").text(status[0][1])
+
+                    }
 
 
-            </script>
-
-
-            <script>
-                $('#view_request_btn').on('click', function () {
-
-
-                    $('#loader40').show();
-                    $('#count_errors').text('');
-
-
-                    $.ajax({
-                        url: "{{route('user.view_request.save')}}",
-                        type: "POST",
-                        data: {
-                            "_token": '<?php echo csrf_token()?>',
-
-                            "count": $('#count').val(),
-                            "ads_id": $('#ads_id').val(),
-
-
-                        },
-                        success: function (data) {
-                            $('#loader40').hide();
-                            if (data.status === 1) {
-                                $('#view_request_form').slideUp();
-
-                            }
-                            $('#view_request_alert').show();
-
-                            $('#view_request_message').text(data.message)
-                        },
-                        error: function (error) {
-                            console.log(error);
-
-                            if (error.status === 422) {
-                                var errors = $.parseJSON(error.responseText);
-
-
-                                $.each(errors.errors, function (key, val) {
-                                    $("#" + key + "_errors").text(val[0]);
-                                });
-                            }
-                            $('#loader40').hide();
-
-                        }
-                    });
-
-                });
-
-                function setModal(id, title) {
-
-                    $('#ads_title').text(title);
-                    $('#ads_id').val(id);
                 }
+            });
+
+        }
 
 
-            </script>
+    </script>
+
+
+    <script>
+        $('#view_request_btn').on('click', function () {
+
+
+            $('#loader40').show();
+            $('#count_errors').text('');
+
+
+            $.ajax({
+                url: "{{route('user.view_request.save')}}",
+                type: "POST",
+                data: {
+                    "_token": '<?php echo csrf_token()?>',
+
+                    "count": $('#count').val(),
+                    "ads_id": $('#ads_id').val(),
+
+
+                },
+                success: function (data) {
+                    $('#loader40').hide();
+                    if (data.status === 1) {
+                        $('#view_request_form').slideUp();
+
+                    }
+                    $('#view_request_alert').show();
+
+                    $('#view_request_message').text(data.message)
+                },
+                error: function (error) {
+                    console.log(error);
+
+                    if (error.status === 422) {
+                        var errors = $.parseJSON(error.responseText);
+
+
+                        $.each(errors.errors, function (key, val) {
+                            $("#" + key + "_errors").text(val[0]);
+                        });
+                    }
+                    $('#loader40').hide();
+
+                }
+            });
+
+        });
+
+        function setModal(id, title) {
+
+            $('#ads_title').text(title);
+            $('#ads_id').val(id);
+        }
+
+
+    </script>
 
 @stop

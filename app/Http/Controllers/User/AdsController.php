@@ -286,6 +286,7 @@ class AdsController extends Controller
                 break;
         }
 
+//        return $search_ads;
         return view('layouts.material.user.ads.search_list', compact('search_ads', 'url', 'my_engine'));
 
     }

@@ -272,7 +272,7 @@ $path=url('template/site1');?>
 @show
 
 <script type="text/javascript" src="https://www.adclicki.ir/js/pgk.js"></script>
-<a id="demo" href="https://www.adclicki.ir/user/pgk/5">-</a>
+<a id="demo" href="https://www.adclicki.ir/user/pgk/155">-</a>
 <!-- shema-->
 {{--<script src="//code.tidio.co/anzdmo7lio9uih04o0xjh6wrzcmhjsee.js"></script>--}}
 <script>

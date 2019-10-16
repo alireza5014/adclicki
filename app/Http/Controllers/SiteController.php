@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\classes\ImageUpload;
 use App\Http\Requests\LoginRequest;
 
 use App\Http\Requests\RecoveryRequest;
@@ -32,6 +33,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 use Mockery\Exception;
+use PHPImage;
 use SebastianBergmann\CodeCoverage\Report\Xml\Unit;
 use SoapClient;
 use Telegram\Bot\Api;
@@ -585,6 +587,69 @@ document.getElementById('adclicki').appendChild(a);";
 
     public function home()
     {
+
+
+//        $text_temp = explode(PHP_EOL, "زیبایی های روستای مال آقا
+//ویژگی اصلی روستای مال آقا بکر بودن و ناشناخته بودن آن در میان مردم و گردشگران است. این روستا، از معدود روستاهای کشور است که بیشتر بافت سنتی و تاریخی اش را به طور کامل حفظ کرده است. طبیعت اطراف روستا نیز بسیار تمیز و دست نخورده باقی مانده است و البته امیدواریم که طی سال های آینده نیز همینطور هم باقی بماند. این روستا، درون دره ای باصفا که در میان کوه های زاگرس پدید آمده، قرار گرفته است. درون این دره و در مجاورت روستا، رودخانه ای پر آب و خروشان جریان دارد که بسیاری از مردم محلی آب آن را می نوشند. البته اگر در روزهای آخر هفته به این منطقه سفر کردید، هیچگاه از آب این رودخانه ننوشید، چرا که به دلیل ازدحام محلیان در اطراف آن، آب کمی کثیف می شود.");
+//
+//        $text=str_replace("\r\n","","زیبایی های روستای مال آقا
+//ویژگی اصلی روستای مال آقا بکر بودن و ناشناخته بودن آن در میان مردم و گردشگران است. این روستا، از معدود روستاهای کشور است که بیشتر بافت سنتی و تاریخی اش را به طور کامل حفظ کرده است. طبیعت اطراف روستا نیز بسیار تمیز و دست نخورده باقی مانده است و البته امیدواریم که طی سال های آینده نیز همینطور هم باقی بماند. این روستا، درون دره ای باصفا که در میان کوه های زاگرس پدید آمده، قرار گرفته است. درون این دره و در مجاورت روستا، رودخانه ای پر آب و خروشان جریان دارد که بسیاری از مردم محلی آب آن را می نوشند. البته اگر در روزهای آخر هفته به این منطقه سفر کردید، هیچگاه از آب این رودخانه ننوشید، چرا که به دلیل ازدحام محلیان در اطراف آن، آب کمی کثیف می شود.");
+//
+////        $text_temp = preg_split('//u', $text, 20, PREG_SPLIT_NO_EMPTY);
+////        $text_temp=  str_split($text,20);
+//
+//        $text1 = "";
+////         return $text_temp[0];
+//        for ($i = 0; $i < sizeof($text_temp); $i++) {
+//            $text1 .= fagd($text_temp[$i], 'fa') . "\n";
+//
+//        }
+//      return  $text = $text1;
+
+
+        $image = new PHPImage(650, 700);
+
+        $bg = new PHPImage('images/bg1.jpg');
+        $bg->resize(650,600);
+        $overlay = 'images/logo.png';
+
+//        $image->setDimensionsFromImage($bg);
+        $image->draw($bg,0,100);
+        $image->draw($overlay, '50', '0');
+
+        $image->rectangle(0, 0, 600, 100, array(255, 222, 0), 0.5);
+        $image->setFont('fonts/IRANSansWeb.ttf');
+
+        $image->setAlignHorizontal('right');
+        $image->setTextColor(array(0, 0, 0));
+
+        $image->setStrokeWidth(.1);
+        $image->setStrokeColor(array(255, 0, 0));
+//        $image->textBox('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam molestie tortor quam, at congue nibh imperdiet dapibus.', array(
+
+//        $image->text('Hello World!', array('fontSize' => 12, 'x' => 50, 'y' => 50));
+//        $image->text('This is a big sentence', array(
+//            'fontSize' => 60, // Desired starting font size
+//            'x' => 100,
+//            'y' => 100,
+//            'width' => 200,
+//            'height' => 50,
+//            'alignHorizontal' => 'center',
+//            'alignVertical' => 'center',
+//            'debug' => true
+//        ));
+        $image->textBox('ﺎﻗآ لﺎﻣ یﺎﺘﺳﻭﺭ یﺎﻫ ﯽﯾﺎﺒﯾﺯ
+  هﺎﮕﭽﻴﻫ ،ﺪﯾﺩﺮﻛ ﺮﻔﺳ ﻪﻘﻄﻨﻣ ﻦﯾا ﻪﺑ ﻪﺘﻔﻫ ﺮﺧآ یﺎﻫﺯﻭﺭ رﺩ ﺮﮔا ﻪﺘﺒﻟا .ﺪﻨﺷﻮﻧ ﯽﻣ اﺭ نآ بآ ﯽﻠﺤﻣ مﺩﺮﻣ زا یﺭﺎﻴﺴﺑ ﻪﻛ دﺭا ﻭ.ﺪﻨﺷﻮﻧ ﯽﻣ اﺭ نآ بآ ﯽﻠﺤﻣ مﺩﺮﻣ زا یﺭﺎﻴﺴﺑ ﻪﻛ دﺭا ﻭ.ﺪﻨﺷﻮﻧ ﯽﻣ اﺭ نآ بآ ﯽﻠﺤﻣ مﺩﺮﻣ زا یﺭﺎﻴﺴﺑ ﻪﻛ دﺭا ﻭ.ﺪﻨﺷﻮﻧ ﯽﻣ اﺭ نآ بآ ﯽﻠﺤﻣ مﺩﺮﻣ زا یﺭﺎﻴﺴﺑ ﻪﻛ دﺭا ﻭ.ﺪﻨﺷﻮﻧ ﯽﻣ اﺭ نآ بآ ﯽﻠﺤﻣ مﺩﺮﻣ زا یﺭﺎﻴﺴﺑ ﻪﻛ دﺭا ﻭ.ﺪﻨﺷﻮﻧ ﯽﻣ اﺭ نآ بآ ﯽﻠﺤﻣ مﺩﺮﻣ زا یﺭﺎﻴﺴﺑ ﻪﻛ دﺭا ﻭ.ﺪﻨﺷﻮﻧ ﯽﻣ اﺭ نآ بآ ﯽﻠﺤﻣ مﺩﺮﻣ زا یﺭﺎﻴﺴﺑ ﻪﻛ دﺭا ﻭ.ﺪﻨﺷﻮﻧ ﯽﻣ اﺭ نآ بآ ﯽﻠﺤﻣ مﺩﺮﻣ زا یﺭﺎﻴﺴﺑ ﻪﻛ دﺭا ﻭﺭﺩ  رﻮ ﺻا ﯽﮔﮋﯾﻭ', array(
+            'width' => 500,
+            'height' => 500,
+            'fontSize' => 22, // Desired starting font size
+            'x' => 50,
+            'y' => 200
+        ));
+        $image->show();
+
+
+
 
 //return getSiteScreenShot('https://www.adclicki.ir/');
 //        $auth = base64_encode("username:password");

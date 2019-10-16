@@ -5,16 +5,10 @@ namespace App\Http\Controllers\Telegram;
 
 use App\Http\Controllers\Controller;
 
-use App\Model\Ads;
-use App\Model\VisitedLink;
 use App\Ticket;
 use App\TicketAnswer;
 use App\User;
 use Telegram\Bot\Api;
-use Telegram\Bot\Exceptions\TelegramSDKException;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\DB;
 
 
 class TelegramController extends Controller

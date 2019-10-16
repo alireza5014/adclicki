@@ -31,13 +31,19 @@ class TelegramController extends Controller
 
     public function modify_web_hook()
     {
+
+        try {
+//            $this->telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
+            $this->telegram = new Api('915726023:AAGGKAtwsKs487cHzm3LiINZpD6JtzoyYaY');
+        } catch (TelegramSDKException $e) {
+        }
         $url = Input::get('url', '');
         $action = Input::get('action', 'set');
 
 
         $error = null;
         try {
-            $res = ($action == 'set') ? $this->telegram->setWebhook(['url' => $url]) : $this->telegram->removeWebhook();
+         return   $res = ($action == 'set') ? $this->telegram->setWebhook(['url' => $url]) : $this->telegram->removeWebhook();
         } catch (TelegramSDKException $e) {
             $error = $e->getMessage();
 

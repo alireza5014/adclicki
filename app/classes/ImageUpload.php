@@ -11,13 +11,13 @@ namespace App\classes;
 use Intervention\Image\ImageManagerStatic as Image;
 
 use Illuminate\Support\Facades\File;
+use PHPImage;
 
 class ImageUpload
 {
 
     private $is_water_mark = false;
     private $is_resized = false;
-
 
 
     private $request;
@@ -34,6 +34,96 @@ class ImageUpload
     private $square_name;
     private $rand;
     private $result;
+
+
+    public static function makeImageWithText2($text, $file_name){
+
+
+
+                $text= fagd($text, 'fa') ;
+
+        $image = new PHPImage(650, 700);
+
+        $bg = new PHPImage('images/bg1.jpg');
+        $bg->resize(650,600);
+        $overlay = 'images/logo.png';
+
+//        $image->setDimensionsFromImage($bg);
+        $image->draw($bg,0,100);
+        $image->draw($overlay, '50', '0');
+
+        $image->rectangle(0, 0, 600, 100, array(255, 222, 0), 0.5);
+        $image->setFont('fonts/IRANSansWeb.ttf');
+
+        $image->setAlignHorizontal('right');
+        $image->setTextColor(array(0, 0, 0));
+
+        $image->setStrokeWidth(.1);
+        $image->setStrokeColor(array(255, 0, 0));
+//        $image->textBox('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam molestie tortor quam, at congue nibh imperdiet dapibus.', array(
+
+//        $image->text('Hello World!', array('fontSize' => 12, 'x' => 50, 'y' => 50));
+//        $image->text('This is a big sentence', array(
+//            'fontSize' => 60, // Desired starting font size
+//            'x' => 100,
+//            'y' => 100,
+//            'width' => 200,
+//            'height' => 50,
+//            'alignHorizontal' => 'center',
+//            'alignVertical' => 'center',
+//            'debug' => true
+//        ));
+        $image->textBox($text, array(
+            'width' => 500,
+            'height' => 400,
+            'fontSize' => 22, // Desired starting font size
+            'x' => 50,
+            'y' => 200
+        ));
+        $image->save(public_path($file_name));
+
+    }
+    public static function makeImageWithText($text, $file_name)
+    {
+        $text_temp = explode(PHP_EOL, $text);
+
+        $text=str_replace("\r\n","",$text);
+
+//        $text_temp = preg_split('//u', $text, 20, PREG_SPLIT_NO_EMPTY);
+//        $text_temp=  str_split($text,20);
+
+        $text1 = "";
+//         return $text_temp[0];
+        for ($i = 0; $i < sizeof($text_temp); $i++) {
+            $text1 .= fagd($text_temp[$i], 'fa') . "\n";
+
+        }
+        $text = $text1;
+        $rand_color = '#' . substr(md5(mt_rand()), 0, 6);
+
+        $img = Image::canvas(500, 500, $rand_color);
+
+        $img->text($text, 10, 200, function ($font) {
+//           $font->file(public_path().'/fonts/ARLRDBD.TTF');
+            $font->file(public_path() . '/fonts/IRANSansWeb.ttf');
+
+//            $font->file(public_path().'/fonts/IRANSansWeb.ttf');
+            $font->size(30);
+            $font->color('#fff');
+            $font->align('left');
+            $font->valign('center');
+//            $font->halign('center');
+            $font->angle(0);
+        });
+
+//        $img->text('foo', 0, 0, function($font) {
+//            $font->color(array(rand(0,255), rand(0,255), rand(0,255), 0.5));
+//        });
+
+        $img->save(public_path() . "/" . $file_name);
+
+    }
+
 
     public function request($request)
     {
@@ -166,7 +256,7 @@ class ImageUpload
             }
             if ($this->is_resized) {
                 $this->makeResized($path, 0);
-                $this->makeSquare($path,0);
+                $this->makeSquare($path, 0);
             }
 
             $this->result['image_path'][0] = $path[0];
@@ -267,7 +357,6 @@ class ImageUpload
 
         $img1->save(public_path() . '/' . $this->store_path . '/' . $this->square_name);
         $this->result['square_path'][$i] = $this->store_path . '/' . $this->square_name;
-
 
 
     }

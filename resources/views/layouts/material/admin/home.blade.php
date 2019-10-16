@@ -15,7 +15,8 @@
         @foreach($data as $key=>$value)
 
             <div class="col-sm-6 col-md-4">
-                <div class="quick-stats__item bg-light-green">
+                {{--<div class="quick-stats__item bg-light-blue">--}}
+                <div class="quick-stats__item  " style="background: {{'#' . substr(md5(mt_rand()), 0, 6)}}">
                     <div class="quick-stats__info">
                         <h3>{{convert_to_digit($value)}}</h3>
                         <h5 class="text-white"> {{$key}}</h5>
